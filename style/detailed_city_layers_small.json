@@ -1,0 +1,25 @@
+{
+  "ox.features_from_bbox": {
+    "park":        { "tags": { "leisure": "park" },       "color": "#c8e6c9", "gtype": "polygon", "zorder": 1 },
+    "forest":      { "tags": { "natural": "wood" },       "color": "#c8e6c9", "gtype": "polygon", "zorder": 1 },
+    "meadow":      { "tags": { "landuse": "meadow" },     "color": "#c8e6c9", "gtype": "polygon", "zorder": 1 },
+    "orchard":     { "tags": { "landuse": "orchard" },    "color": "#c8e6c9", "gtype": "polygon", "zorder": 1 },
+    "garden":      { "tags": { "landuse": "garden" },     "color": "#c8e6c9", "gtype": "polygon", "zorder": 1 },
+    "cemetery":    { "tags": { "landuse": "cemetery" },   "color": "#c8e6c9", "gtype": "polygon", "zorder": 1 },
+    "grass":       { "tags": { "landuse": "grass" },      "color": "#c8e6c9", "gtype": "polygon", "zorder": 1 },
+    "water":       { "tags": { "natural": "water" },      "color": "#a3cef1", "gtype": "polygon", "zorder": 1 },
+    "wetland":     { "tags": { "natural": "wetland" },    "color": "#cce4e3", "gtype": "polygon", "zorder": 1 },
+    "river_poly":  { "tags": { "waterway": "riverbank" }, "color": "#a3cef1", "gtype": "polygon", "zorder": 1 },
+
+    "river_line":  { "tags": { "waterway": "river" },     "color": "#a3cef1", "gtype": "line",    "zorder": 2, "width": 2.0 },
+    "road":        { "tags": { "highway": true },         "color": "#f5f5f5", "gtype": "line",    "zorder": 2, "width": 1.5 },
+    "rail":        { "tags": { "railway": true },         "color": "#c9c9c9", "gtype": "line",    "zorder": 2, "width": 1.2 },
+
+    "building":    { "tags": { "building": true },        "color": "#e0e1d3", "gtype": "polygon", "zorder": 1 },
+    "stadium":     { "tags": { "leisure": "stadium" },    "color": "#FFF5D9", "gtype": "polygon", "zorder": 1 },
+    "aerodrome":   { "tags": { "aeroway": true },         "color": "#ffcc80", "gtype": "polygon", "zorder": 1 }
+  },
+  "by_area_id": {
+    "city_boundary": { "tags": {}, "color": "#f9f9f9", "gtype": "polygon", "zorder": 0 }
+  }
+}

@@ -1,0 +1,16 @@
+output/
+**/__pycache__/
+**/__pycache__/*.pyc
+venv/
+.env
+cache/
+data/
+debug/
+*.png
+*.svg
+
+!style/
+!style/**
+
+!assets/icons/
+!assets/icons/*.svg

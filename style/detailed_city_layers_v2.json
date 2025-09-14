@@ -1,0 +1,243 @@
+{
+  "ox.features_from_bbox": {
+    "park": {
+      "tags": { "leisure": "park" },
+      "color": "#D4E8D4",
+      "gtype": "polygon",
+      "zorder": 1,
+      "fill": { "mode": "pattern_image", "path": "assets/patterns/park_lawn_02.png", "px_per_meter": 0.75, "angle": 0, "alpha": 0.72, "fallback_solid_if_missing": true },
+      "label": { "field": "name", "placement": "centroid", "size_pt": 10, "color": "#2f4a2f", "halo_color": "#ffffff", "halo_width": 2.0, "alpha": 0.95, "zorder": 3.2 }
+    },
+    "forest": {
+      "tags": { "natural": "wood" },
+      "color": "#C8D9B4",
+      "gtype": "polygon",
+      "zorder": 1,
+      "fill": { "mode": "pattern_image", "path": "assets/patterns/forest_canopy_soft_01.png", "px_per_meter": 0.75, "angle": 0, "alpha": 0.7, "fallback_solid_if_missing": true },
+      "label": { "field": "name", "placement": "centroid", "size_pt": 10, "color": "#2f4a2f", "halo_color": "#ffffff", "halo_width": 2.0, "alpha": 0.95, "zorder": 3.2 }
+    },
+    "meadow": {
+      "tags": { "landuse": "meadow" },
+      "color": "#E6F2D9",
+      "gtype": "polygon",
+      "zorder": 1,
+      "fill": { "mode": "pattern_image", "path": "assets/patterns/meadow_soft_blade_01.png", "px_per_meter": 0.75, "angle": 0, "alpha": 0.7, "fallback_solid_if_missing": true }
+    },
+    "orchard": {
+      "tags": { "landuse": "orchard" },
+      "color": "#DDE9CC",
+      "gtype": "polygon",
+      "zorder": 1,
+      "label": { "field": "name", "placement": "centroid", "size_pt": 9, "color": "#2f4a2f", "halo_color": "#ffffff", "halo_width": 2.0, "alpha": 0.9, "zorder": 3.2 }
+    },
+    "garden": {
+      "tags": { "landuse": "garden" },
+      "color": "#E6F0DA",
+      "gtype": "polygon",
+      "zorder": 1,
+      "fill": { "mode": "pattern_image", "path": "assets/patterns/garden_soft_01.png", "px_per_meter": 0.75, "angle": 0, "alpha": 0.65, "fallback_solid_if_missing": true },
+      "label": { "field": "name", "placement": "centroid", "size_pt": 9, "color": "#2f4a2f", "halo_color": "#ffffff", "halo_width": 2.0, "alpha": 0.9, "zorder": 3.2 }
+    },
+    "cemetery": {
+      "tags": { "landuse": "cemetery" },
+      "color": "#DADAD5",
+      "gtype": "polygon",
+      "zorder": 1,
+      "fill": { "mode": "pattern_image", "path": "assets/patterns/cemetery_plaque_01.png", "px_per_meter": 0.75, "angle": 0, "alpha": 0.75, "fallback_solid_if_missing": true },
+      "label": { "field": "name", "placement": "centroid", "size_pt": 9.5, "color": "#3a4b58", "halo_color": "#ffffff", "halo_width": 2.0, "italic": true, "alpha": 0.95, "zorder": 3.2 }
+    },
+    "grass": {
+      "tags": { "landuse": "grass" },
+      "color": "#E4EED5",
+      "gtype": "polygon",
+      "zorder": 1,
+      "fill": { "mode": "pattern_image", "path": "assets/patterns/grass_lawn_01.png", "px_per_meter": 0.75, "angle": 0, "alpha": 0.68, "fallback_solid_if_missing": true }
+    },
+
+    "water": {
+      "tags": { "natural": "water" },
+      "color": "#D3E5F5",
+      "gtype": "polygon",
+      "zorder": 1.5,
+      "fill": { "mode": "pattern_image", "path": "assets/patterns/water_trend_96.png", "px_per_meter": 0.7, "angle": 0, "alpha": 1, "fallback_solid_if_missing": true },
+      "label": { "field": "name", "placement": "centroid", "size_pt": 10, "color": "#2d5f8a", "halo_color": "#ffffff", "halo_width": 2.2, "italic": true, "alpha": 0.95, "zorder": 3.2 }
+    },
+    "wetland": {
+      "tags": { "natural": "wetland" },
+      "color": "#C9E2E0",
+      "gtype": "polygon",
+      "zorder": 1,
+      "fill": { "mode": "pattern_image", "path": "assets/patterns/wetland_reeds_02.png", "px_per_meter": 0.75, "angle": 0, "alpha": 0.72, "fallback_solid_if_missing": true }
+    },
+    "river_poly": {
+      "tags": { "waterway": "riverbank" },
+      "color": "#D3E5F5",
+      "gtype": "polygon",
+      "zorder": 1.5,
+      "fill": { "mode": "pattern_image", "path": "assets/patterns/water_trend_96.png", "px_per_meter": 0.7, "angle": 0, "alpha": 1, "fallback_solid_if_missing": true }
+    },
+    "river_line": {
+      "tags": { "waterway": "river" },
+      "color": "#D3E5F5",
+      "gtype": "line",
+      "zorder": 1.4,
+      "width": 10,
+      "label": { "field": "name", "placement": "line", "size_pt": 10, "color": "#2d5f8a", "halo_color": "#ffffff", "halo_width": 2.0, "min_len_m": 150, "align": "center", "repeat_m": 2000, "straight_tol_m": 6.0, "italic": true, "alpha": 0.95, "zorder": 3.3 }
+    },
+    "stream": {
+      "tags": { "waterway": ["stream", "ditch", "drain"] },
+      "color": "#D3E5F5",
+      "gtype": "line",
+      "zorder": 1.42,
+      "width": 2.2,
+      "label": { "field": "name", "placement": "line", "size_pt": 9, "color": "#2d5f8a", "halo_color": "#ffffff", "halo_width": 1.6, "repeat_m": 1200, "straight_tol_m": 6.0, "italic": true, "alpha": 0.95, "zorder": 3.31 }
+    },
+
+    "primary_casing":  { "tags": { "highway": ["primary","trunk","motorway"] }, "gtype": "line", "color": "#C9CFD6", "zorder": 1.98, "width": 12 },
+    "primary":         { "tags": { "highway": ["primary","trunk","motorway"] }, "gtype": "line", "color": "#FFFFFF", "zorder": 2.00, "width": 10,
+      "label": { "field": "name", "placement": "line", "size_pt": 11, "color": "#324656", "halo_color": "#ffffff", "halo_width": 2.0, "min_len_m": 120, "repeat_m": 800, "straight_tol_m": 7.0, "alpha": 0.95, "zorder": 3.35 } },
+
+    "secondary_casing":{ "tags": { "highway": ["secondary","tertiary"] }, "gtype": "line", "color": "#D5DADF", "zorder": 1.97, "width": 10 },
+    "secondary":       { "tags": { "highway": ["secondary","tertiary"] }, "gtype": "line", "color": "#FFFFFF", "zorder": 1.99, "width": 8,
+      "label": { "field": "name", "placement": "line", "size_pt": 10, "color": "#3a4b58", "halo_color": "#ffffff", "halo_width": 1.8, "min_len_m": 90, "repeat_m": 900, "straight_tol_m": 7.0, "alpha": 0.95, "zorder": 3.34 } },
+
+    "residential_casing":{ "tags": { "highway": ["residential","unclassified","living_street"] }, "gtype": "line", "color": "#E1E6EB", "zorder": 1.96, "width": 8 },
+    "residential":       { "tags": { "highway": ["residential","unclassified","living_street"] }, "gtype": "line", "color": "#FFFFFF", "zorder": 1.98, "width": 6,
+      "label": { "field": "name", "placement": "line", "size_pt": 9, "color": "#3a4b58", "halo_color": "#ffffff", "halo_width": 1.6, "min_len_m": 70, "repeat_m": 700, "straight_tol_m": 8.0, "alpha": 0.92, "zorder": 3.33 } },
+
+    "service": {
+      "tags": {},
+      "custom_filter": "[\"highway\"=\"service\"][!\"service\"!~\"parking_aisle\"]",
+      "gtype": "line", "color": "#FFFFFF", "zorder": 1.95, "width": 4
+    },
+    "parking_aisle": {
+      "tags": {},
+      "custom_filter": "[\"highway\"=\"service\"][\"service\"=\"parking_aisle\"]",
+      "gtype": "line", "color": "#FFFFFF", "zorder": 1.95, "width": 3
+    },
+    "foot_cycle": { "tags": { "highway": ["footway","path","cycleway"] }, "gtype": "line", "color": "#F2F3F5", "zorder": 1.90, "width": 2.2, "dash": [4,2] },
+    "steps":      { "tags": { "highway": "steps" },                 "gtype": "line", "color": "#F2F3F5", "zorder": 1.90, "width": 2.4, "dash": [2,2] },
+
+    "rail": {
+      "tags": { "railway": ["rail", "light_rail", "subway", "tram"] },
+      "color": "#B0B0B0",
+      "gtype": "line",
+      "zorder": 1.9,
+      "width": 3
+    },
+
+    "building": {
+      "tags": { "building": true },
+      "color": "#ECEBE4",
+      "gtype": "polygon",
+      "zorder": 1.1,
+      "stroke": { "color": "#C9C9BD", "width": 0.5 },
+      "label": {
+        "field": "addr:housenumber",
+        "placement": "centroid",
+        "size_pt": 8,
+        "color": "#3a4b58",
+        "halo_color": "#ffffff",
+        "halo_width": 1.1,
+        "alpha": 0.9,
+        "zorder": 3.25,
+        "min_area_m2": 700,
+        "max_count_per_tile": 80
+      }
+    },
+
+    "historic": {
+      "tags": { "historic": true },
+      "color": "#b3b3b3",
+      "gtype": "point",
+      "zorder": 1.0,
+      "fill": { "mode": "empty" },
+      "label": { "field": "name", "placement": "centroid", "size_pt": 12, "color": "#3a4b58", "halo_color": "#ffffff", "halo_width": 1.2, "alpha": 0.95, "zorder": 3.4 }
+    },
+
+    "amenity_point": {
+      "tags": { "amenity": ["school","kindergarten","college","university","library","arts_centre","hospital","clinic","doctors","dentist","pharmacy","nursing_home","social_facility","townhall","community_centre","public_building","courthouse","police","fire_station","post_office","theatre","cinema","planetarium","museum","place_of_worship"] },
+      "color": "#b3b3b3",
+      "gtype": "point",
+      "zorder": 1.0,
+      "fill": { "mode": "empty" },
+      "label": { "field": "name", "placement": "point", "size_pt": 11, "color": "#3a4b58", "halo_color": "#ffffff", "halo_width": 1.2, "alpha": 0.95, "zorder": 3.4 }
+    },
+    "amenity_line": {
+      "tags": { "amenity": ["school","kindergarten","college","university","library","arts_centre","hospital","clinic","doctors","dentist","pharmacy","nursing_home","social_facility","townhall","community_centre","public_building","courthouse","police","fire_station","post_office","theatre","cinema","planetarium","museum","place_of_worship"] },
+      "color": "#b3b3b3",
+      "gtype": "line",
+      "zorder": 1.0,
+      "fill": { "mode": "empty" },
+      "label": { "field": "name", "placement": "line", "size_pt": 11, "color": "#3a4b58", "halo_color": "#ffffff", "halo_width": 1.2, "alpha": 0.95, "zorder": 3.4 }
+    },
+    "amenity_polygon": {
+      "tags": { "amenity": ["school","kindergarten","college","university","library","arts_centre","hospital","clinic","doctors","dentist","pharmacy","nursing_home","social_facility","townhall","community_centre","public_building","courthouse","police","fire_station","post_office","theatre","cinema","planetarium","museum","place_of_worship"] },
+      "color": "#b3b3b3",
+      "gtype": "polygon",
+      "zorder": 1.0,
+      "fill": { "mode": "empty" },
+      "label": { "field": "name", "placement": "centroid", "size_pt": 11, "color": "#3a4b58", "halo_color": "#ffffff", "halo_width": 1.2, "alpha": 0.95, "zorder": 3.4 }
+    },
+
+    "school_ground": {
+      "tags": { "amenity": "school" },
+      "color": "#F1F5FF",
+      "gtype": "polygon",
+      "zorder": 1.0,
+      "fill": { "mode": "solid", "alpha": 0.5 },
+      "label": { "field": "name", "placement": "centroid", "size_pt": 11, "color": "#2E3E57", "halo_color": "#ffffff", "halo_width": 2.0, "zorder": 3.3 }
+    },
+    "hospital_ground": {
+      "tags": { "amenity": "hospital" },
+      "color": "#FFF1F1",
+      "gtype": "polygon",
+      "zorder": 1.0,
+      "fill": { "mode": "solid", "alpha": 0.45 },
+      "label": { "field": "name", "placement": "centroid", "size_pt": 11, "color": "#5A2E2E", "halo_color": "#ffffff", "halo_width": 2.0, "zorder": 3.3 }
+    },
+    "sports_pitch": {
+      "tags": { "leisure": ["pitch", "sports_centre", "playground"] },
+      "color": "#EAF5E8",
+      "gtype": "polygon",
+      "zorder": 1.0,
+      "fill": { "mode": "solid", "alpha": 0.55 }
+    },
+
+    "stadium": {
+      "tags": { "leisure": "stadium" },
+      "color": "#FFF5D9",
+      "gtype": "polygon",
+      "zorder": 1,
+      "fill": { "mode": "pattern_image", "path": "assets/patterns/stadium_turf_01.png", "px_per_meter": 0.75, "angle": 0, "alpha": 0.75, "fallback_solid_if_missing": true },
+      "label": { "field": "name", "placement": "centroid", "size_pt": 10.5, "color": "#3a4b58", "halo_color": "#ffffff", "halo_width": 2.0, "alpha": 0.95, "zorder": 3.2 }
+    },
+    "aerodrome": {
+      "tags": { "aeroway": true },
+      "color": "#E6DFF0",
+      "gtype": "polygon",
+      "zorder": 1,
+      "fill": { "mode": "pattern_image", "path": "assets/patterns/apron_concrete_01.png", "px_per_meter": 0.75, "angle": 0, "alpha": 0.75, "fallback_solid_if_missing": true },
+      "label": { "field": "name", "placement": "centroid", "size_pt": 12, "color": "#3a4b58", "halo_color": "#ffffff", "halo_width": 2.4, "weight": "bold", "alpha": 0.96, "zorder": 3.3 }
+    },
+
+    "place_city":       { "tags": { "place": "city" },        "color": "#f9f9f9", "gtype": "point", "zorder": 2.6, "label": { "field": "name", "placement": "point", "size_pt": 18, "color": "#0b1d2a", "halo_color": "#ffffff", "halo_width": 3.2, "weight": "bold", "alpha": 0.98, "zorder": 3.6, "align": "center" } },
+    "place_town":       { "tags": { "place": "town" },        "color": "#f9f9f9", "gtype": "point", "zorder": 2.6, "label": { "field": "name", "placement": "point", "size_pt": 15, "color": "#0b1d2a", "halo_color": "#ffffff", "halo_width": 2.8, "weight": "bold", "alpha": 0.97, "zorder": 3.5, "align": "center" } },
+    "place_village":    { "tags": { "place": "village" },     "color": "#f9f9f9", "gtype": "point", "zorder": 2.6, "label": { "field": "name", "placement": "point", "size_pt": 13, "color": "#3a4b58", "halo_color": "#ffffff", "halo_width": 2.4, "weight": "bold", "alpha": 0.97, "zorder": 3.4, "align": "center" } },
+    "place_suburb":     { "tags": { "place": "suburb" },      "color": "#f9f9f9", "gtype": "point", "zorder": 2.5, "label": { "field": "name", "placement": "point", "size_pt": 13, "color": "#3a4b58", "halo_color": "#ffffff", "halo_width": 2.4, "weight": "bold", "alpha": 0.97, "zorder": 3.4, "align": "center" } },
+    "place_neighbourhood": { "tags": { "place": "neighbourhood" }, "color": "#f9f9f9", "gtype": "point", "zorder": 2.5, "label": { "field": "name", "placement": "point", "size_pt": 12, "color": "#3a4b58", "halo_color": "#ffffff", "halo_width": 2.2, "weight": "bold", "alpha": 0.97, "zorder": 3.4, "align": "center" } }
+  },
+
+  "by_area_id": {
+    "city_boundary": { "tags": {}, "color": "#f9f9f9", "gtype": "polygon", "zorder": 0 }
+  },
+
+  "ox.graph_edges_from_polygon": {
+    "bridge_shadow_soft": { "tags": {}, "custom_filter": "[\"highway\"~\"motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|service\"][\"bridge\"=\"yes\"]", "color": "#5A6A78", "gtype": "line", "zorder": 1.92, "width": 26, "alpha": 0.10 },
+    "bridge_shadow_mid":  { "tags": {}, "custom_filter": "[\"highway\"~\"motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|service\"][\"bridge\"=\"yes\"]", "color": "#5A6A78", "gtype": "line", "zorder": 1.93, "width": 22, "alpha": 0.16 },
+    "bridge_shadow_near": { "tags": {}, "custom_filter": "[\"highway\"~\"motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|service\"][\"bridge\"=\"yes\"]", "color": "#5A6A78", "gtype": "line", "zorder": 1.94, "width": 18, "alpha": 0.22 },
+
+    "bridge_deck": { "tags": {}, "custom_filter": "[\"bridge\"=\"yes\"][\"highway\"~\"motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|service\"]", "gtype": "line", "color": "#FFFFFF", "zorder": 2.02, "width": 10 },
+    "tunnel":      { "tags": {}, "custom_filter": "[\"tunnel\"=\"yes\"][\"highway\"~\".*\"]", "gtype": "line", "color": "#FFFFFF", "zorder": 1.90, "width": 6, "dash": [6,4] }
+  }
+}

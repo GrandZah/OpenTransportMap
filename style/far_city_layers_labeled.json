@@ -1,0 +1,250 @@
+{
+  "ox.features_from_bbox": {
+    "park": {
+      "tags": {
+        "leisure": "park"
+      },
+      "color": "#D4E8D4",
+      "gtype": "polygon",
+      "zorder": 1
+    },
+    "forest": {
+      "tags": {
+        "natural": "wood"
+      },
+      "color": "#C8D9B4",
+      "gtype": "polygon",
+      "zorder": 1
+    },
+    "meadow": {
+      "tags": {
+        "landuse": "meadow"
+      },
+      "color": "#E6F2D9",
+      "gtype": "polygon",
+      "zorder": 1
+    },
+    "cemetery": {
+      "tags": {
+        "landuse": "cemetery"
+      },
+      "color": "#DADAD5",
+      "gtype": "polygon",
+      "zorder": 1
+    },
+    "grass": {
+      "tags": {
+        "landuse": "grass"
+      },
+      "color": "#E4EED5",
+      "gtype": "polygon",
+      "zorder": 1
+    },
+    "water": {
+      "tags": {
+        "natural": "water"
+      },
+      "color": "#D3E5F5",
+      "gtype": "polygon",
+      "zorder": 1.5,
+      "label": {
+        "field": "name",
+        "placement": "centroid",
+        "size_pt": 9,
+        "color": "#2d5f8a",
+        "halo_color": "#ffffff",
+        "halo_width": 2.2,
+        "italic": true,
+        "alpha": 0.9,
+        "zorder": 3.2
+      }
+    },
+    "wetland": {
+      "tags": {
+        "natural": "wetland"
+      },
+      "color": "#C9E2E0",
+      "gtype": "polygon",
+      "zorder": 1,
+      "label": {
+        "field": "name",
+        "placement": "centroid",
+        "size_pt": 9,
+        "color": "#2d5f8a",
+        "halo_color": "#ffffff",
+        "halo_width": 2.0,
+        "italic": true,
+        "alpha": 0.9,
+        "zorder": 3.2
+      }
+    },
+    "river_line": {
+      "tags": {
+        "waterway": "river"
+      },
+      "color": "#D3E5F5",
+      "gtype": "line",
+      "zorder": 1.4,
+      "width": 10,
+      "label": {
+        "field": "name",
+        "placement": "line",
+        "size_pt": 9,
+        "color": "#2d5f8a",
+        "halo_color": "#ffffff",
+        "halo_width": 2.2,
+        "min_len_m": 300,
+        "align": "center",
+        "repeat_m": 3000,
+        "straight_tol_m": 6.0,
+        "italic": true,
+        "alpha": 0.9,
+        "zorder": 3.3
+      }
+    },
+    "road": {
+      "tags": {
+        "highway": [
+          "motorway",
+          "trunk",
+          "primary",
+          "secondary",
+          "tertiary",
+          "unclassified",
+          "residential",
+          "living_street"
+        ]
+      },
+      "color": "#FFFFFF",
+      "gtype": "line",
+      "zorder": 2,
+      "width": 10
+    },
+    "rail": {
+      "tags": {
+        "railway": true
+      },
+      "color": "#B0B0B0",
+      "gtype": "line",
+      "zorder": 1.9,
+      "width": 3
+    },
+    "city_districts": {
+      "tags": {
+        "landuse": [
+          "commercial",
+          "construction",
+          "education",
+          "fairground",
+          "industrial",
+          "residential",
+          "retail",
+          "institutional"
+        ]
+      },
+      "color": "#F2F1EC",
+      "gtype": "polygon",
+      "zorder": 1
+    },
+    "healthcare": {
+      "tags": {
+        "healthcare": true
+      },
+      "color": "#FFF0F0",
+      "gtype": "polygon",
+      "zorder": 1
+    },
+    "stadium": {
+      "tags": {
+        "leisure": "stadium"
+      },
+      "color": "#FFF5D9",
+      "gtype": "polygon",
+      "zorder": 1
+    },
+    "aerodrome": {
+      "tags": {
+        "aeroway": true
+      },
+      "color": "#E6DFF0",
+      "gtype": "polygon",
+      "zorder": 1,
+      "label": {
+        "field": "name",
+        "placement": "centroid",
+        "size_pt": 11,
+        "color": "#3a4b58",
+        "halo_color": "#ffffff",
+        "halo_width": 2.2,
+        "weight": "bold",
+        "alpha": 0.95,
+        "zorder": 3.3
+      }
+    },
+    "place_suburb": {
+      "tags": {
+        "place": "suburb"
+      },
+      "color": "#f9f9f9",
+      "gtype": "point",
+      "zorder": 2.5,
+      "label": {
+        "field": "name",
+        "placement": "point",
+        "size_pt": 12,
+        "color": "#3a4b58",
+        "halo_color": "#ffffff",
+        "halo_width": 2.2,
+        "weight": "bold",
+        "alpha": 0.95,
+        "zorder": 3.4,
+        "align": "center"
+      }
+    },
+    "place_neighbourhood": {
+      "tags": {
+        "place": "neighbourhood"
+      },
+      "color": "#f9f9f9",
+      "gtype": "point",
+      "zorder": 2.5
+    }
+  },
+  "by_area_id": {
+    "city_boundary": {
+      "tags": {},
+      "color": "#f9f9f9",
+      "gtype": "polygon",
+      "zorder": 0
+    }
+  },
+  "ox.graph_edges_from_polygon": {
+    "bridge_shadow_soft": {
+      "tags": {},
+      "custom_filter": "[\"highway\"~\"motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street\"][\"bridge\"=\"yes\"]",
+      "color": "#5A6A78",
+      "gtype": "line",
+      "zorder": 1.92,
+      "width": 26,
+      "alpha": 0.1
+    },
+    "bridge_shadow_mid": {
+      "tags": {},
+      "custom_filter": "[\"highway\"~\"motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street\"][\"bridge\"=\"yes\"]",
+      "color": "#5A6A78",
+      "gtype": "line",
+      "zorder": 1.93,
+      "width": 22,
+      "alpha": 0.16
+    },
+    "bridge_shadow_near": {
+      "tags": {},
+      "custom_filter": "[\"highway\"~\"motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street\"][\"bridge\"=\"yes\"]",
+      "color": "#5A6A78",
+      "gtype": "line",
+      "zorder": 1.94,
+      "width": 18,
+      "alpha": 0.22
+    }
+  }
+}
