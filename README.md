@@ -7,8 +7,11 @@
 **Подробная схематика**  
 ![Detail schematic](docs/images/detail_schematic.png)
 
-**Как может выглядеть в реальном мире**  
-![Overview map](docs/images/overview_map.png)
+**Как может выглядеть в реальном мире**
+<details>
+  <summary>Посмотреть изображение</summary>
+  ![Overview map](docs/images/overview_map.png)
+</details>
 
 ## Быстрый старт
 
@@ -82,6 +85,8 @@ GeoTransportMap/
 
 ## Как установить и запустить проект
 
+<details>
+  <summary>Подробнее...</summary>
 ### 0) Требования
 
 - **OS**: Linux, macOS или Windows 10/11
@@ -132,3 +137,6 @@ poetry run transport-posters --limit 1 --render-map --render-routes --area-id 16
 ```
 
 Через несколько минут в `output/` появятся результаты (см. раздел ниже).
+
+</details>
+
