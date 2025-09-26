@@ -10,6 +10,7 @@
 **Как может выглядеть в реальном мире**
 <details>
   <summary>Посмотреть изображение</summary>
+  
   ![Overview map](docs/images/overview_map.png)
 </details>
 
@@ -87,6 +88,7 @@ GeoTransportMap/
 
 <details>
   <summary>Подробнее...</summary>
+  
 ### 0) Требования
 
 - **OS**: Linux, macOS или Windows 10/11
