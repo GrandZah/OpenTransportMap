@@ -3,10 +3,10 @@ import geopandas as gpd
 from shapely.geometry import LineString, MultiLineString
 import matplotlib.pyplot as plt
 
-from data_map.get_style_layers import LabelSpec
-from render_map.utils_text_label import _label_margin_m, CONFIG_RENDER_LABELS, _NameDeduper, _text_width_m, \
+from transport_posters.data_map.get_style_layers import LabelSpec
+from transport_posters.render_map.utils_text_label import _label_margin_m, CONFIG_RENDER_LABELS, _NameDeduper, _text_width_m, \
     _text_height_m, _straight_segment, _text_footprint, _footprint_fits, _text_footprint_px, _draw_label, _LabelCollider
-from utils.utils_rendering import meters_to_px
+from transport_posters.utils.utils_rendering import meters_to_px
 
 
 def label_lines(ax: plt.Axes, gdf: gpd.GeoDataFrame, spec: LabelSpec, field: str,

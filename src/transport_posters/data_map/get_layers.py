@@ -16,8 +16,8 @@ import pyarrow.parquet as pq
 import pyarrow.dataset as ds
 import pyarrow.compute as pc
 
-from logger import log_function_call
-from utils.utils_projection import ensure_epsg4326
+from transport_posters.logger import log_function_call
+from transport_posters.utils.utils_projection import ensure_epsg4326
 from .get_style_layers import StyleLayersMap, StyleGeoLayer, BaseLayer, ALLOWED_TYPES
 
 logger = logging.getLogger(__name__)

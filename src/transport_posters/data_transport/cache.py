@@ -5,7 +5,7 @@ import logging
 from typing import Dict
 import geopandas as gpd
 
-from load_configs import OVERPASS_URL, CONFIG_PATHS
+from transport_posters.load_configs import OVERPASS_URL, CONFIG_PATHS
 
 logger = logging.getLogger(__name__)
 

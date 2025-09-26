@@ -7,8 +7,8 @@ import geopandas as gpd
 from shapely.geometry import LineString, Point
 from shapely.ops import substring, transform, linemerge
 
-from logger import log_function_call
-from utils.util_short_name import shorten_stop_name
+from transport_posters.logger import log_function_call
+from transport_posters.utils.util_short_name import shorten_stop_name
 
 logger = logging.getLogger(__name__)
 

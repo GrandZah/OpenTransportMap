@@ -1,7 +1,7 @@
 import logging
 
-from data_transport.get_bus_layers import get_bus_layers, CityRouteDatabase
-from load_configs import load_config_paths
+from transport_posters.data_transport.get_bus_layers import get_bus_layers, CityRouteDatabase
+from transport_posters.load_configs import load_config_paths
 
 CONFIG_PATHS = load_config_paths()
 logger = logging.getLogger(__name__)

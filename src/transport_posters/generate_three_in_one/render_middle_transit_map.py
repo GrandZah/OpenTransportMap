@@ -3,16 +3,16 @@ import matplotlib.pyplot as plt
 import geopandas as gpd
 from pandas import Series
 
-from data_map.get_data_map import LayersMap
-from data_transport.get_bus_layers import CityRouteDatabase
-from load_configs import CONFIG_RENDER, PAPER_SIZES_INCH
-from logger import log_function_call
-from render_map.render_basemap import render_basemap
-from render_map.render_labels_for_layers import render_labels_for_layers
-from render_map.render_walk_access import render_walk_5min_focus_gap
-from render_transport.render_bus_lines_v2 import render_bus_lines_v2
-from utils.forbidden import ForbiddenCollector
-from utils.utils_rendering import fit_bbox_to_aspect
+from transport_posters.data_map.get_data_map import LayersMap
+from transport_posters.data_transport.get_bus_layers import CityRouteDatabase
+from transport_posters.load_configs import CONFIG_RENDER, PAPER_SIZES_INCH
+from transport_posters.logger import log_function_call
+from transport_posters.render_map.render_basemap import render_basemap
+from transport_posters.render_map.render_labels_for_layers import render_labels_for_layers
+from transport_posters.render_map.render_walk_access import render_walk_5min_focus_gap
+from transport_posters.render_transport.render_bus_lines_v2 import render_bus_lines_v2
+from transport_posters.utils.forbidden import ForbiddenCollector
+from transport_posters.utils.utils_rendering import fit_bbox_to_aspect
 
 logger = logging.getLogger(__name__)
 

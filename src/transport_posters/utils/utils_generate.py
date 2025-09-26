@@ -8,7 +8,7 @@ from osmnx._errors import InsufficientResponseError
 from typing import Optional, Dict, Tuple
 import shapely
 
-from load_configs import CONFIG_PATHS
+from transport_posters.load_configs import CONFIG_PATHS
 
 
 def get_bbox_with_buf(area_id: int, buf: float = 0) -> Dict[str, float]:
@@ -37,7 +37,6 @@ def get_bbox_with_buf(area_id: int, buf: float = 0) -> Dict[str, float]:
             except InsufficientResponseError:
                 continue
         else:
-            logger.exception(f"Without in cache and not found by osmnx for area_id: {area_id}")
             raise RuntimeError(f"Without in cache and not found by osmnx for area_id: {area_id}")
 
     minx, miny, maxx, maxy = bounds

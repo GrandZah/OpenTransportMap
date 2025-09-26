@@ -1,14 +1,16 @@
 import argparse
 
-from generate_maps.generate_maps import generate_maps
-from generate_three_in_one.generate_three_in_one import generate_three_in_one
-from logger import configure_root_logger
+from transport_posters.generate_maps.generate_maps import generate_maps
+from transport_posters.generate_three_in_one.generate_three_in_one import generate_three_in_one
+from transport_posters.logger import configure_root_logger
 
 
 def main():
     """
     CLI enter - parse argument and run function of generate img.
     """
+    configure_root_logger()
+
     parser = argparse.ArgumentParser(
         description="Generate per-stop SVG maps with forward bus segments from given stop.")
     parser.add_argument("--area-id", required=True, help="OSM area id (for basemap layers)")
@@ -23,5 +25,4 @@ def main():
 
 
 if __name__ == "__main__":
-    configure_root_logger()
     main()

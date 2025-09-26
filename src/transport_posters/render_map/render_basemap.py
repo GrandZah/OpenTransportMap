@@ -10,9 +10,9 @@ from matplotlib.path import Path
 from matplotlib.patches import PathPatch
 from PIL import Image
 
-from data_map.get_data_map import LayersMap
-from logger import log_function_call
-from utils.utils_rendering import meters_to_points
+from transport_posters.data_map.get_data_map import LayersMap
+from transport_posters.logger import log_function_call
+from transport_posters.utils.utils_rendering import meters_to_points
 
 logger = logging.getLogger(__name__)
 
