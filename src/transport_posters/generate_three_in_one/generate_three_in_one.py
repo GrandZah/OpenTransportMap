@@ -5,7 +5,8 @@ import shapely
 
 from transport_posters.data_map.get_data_map import get_data_map_by_bbox_gdf
 from transport_posters.data_map.get_layers import reproject_all
-from transport_posters.data_transport.get_bus_layers import CityRouteDatabase, get_from_cache_bus_layers
+from transport_posters.data_transport.get_bus_layers import get_from_cache_bus_layers
+from transport_posters.data_transport.сity_route_database import CityRouteDatabase
 from transport_posters.logger import log_function_call
 from transport_posters.utils.utils import slugify
 from .compose_img_to_poster import compose_img_to_poster

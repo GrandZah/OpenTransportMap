@@ -8,7 +8,7 @@ from matplotlib.collections import LineCollection
 import matplotlib.patheffects as pe
 import geopandas as gpd
 
-from transport_posters.data_transport.get_bus_layers import CityRouteDatabase
+from transport_posters.data_transport.сity_route_database import CityRouteDatabase
 from transport_posters.logger import log_function_call
 
 from transport_posters.render_transport.render_stop_point_v2 import (

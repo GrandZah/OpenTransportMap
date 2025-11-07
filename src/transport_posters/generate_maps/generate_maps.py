@@ -6,7 +6,8 @@ import geopandas as gpd
 
 from transport_posters.data_map.get_data_map import get_data_map_by_bbox_gdf
 from transport_posters.data_map.get_layers import LayersMap, reproject_all
-from transport_posters.data_transport.get_bus_layers import CityRouteDatabase, get_from_cache_bus_layers
+from transport_posters.data_transport.get_bus_layers import get_from_cache_bus_layers
+from transport_posters.data_transport.сity_route_database import CityRouteDatabase
 from transport_posters.load_configs import CONFIG_PATHS, CONFIG_RENDER
 from transport_posters.logger import log_function_call
 from transport_posters.render_map.render_basemap import render_basemap
