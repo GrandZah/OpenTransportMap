@@ -55,15 +55,22 @@ def generate_three_in_one(args):
 
     city_bbox_gdf_render = expand_gdf_bounds_in_degrees(city_bbox_gdf_data, -DEGREES_BUF)
 
-    general_layers = get_data_map_by_bbox_gdf(args.area_id, city_bbox_gdf_data, CONFIG_RENDER["general_layers_name"])
-    general_layers = reproject_all(general_layers, local_projection)
+    if args.render_map:
+        general_layers = get_data_map_by_bbox_gdf(args.area_id, city_bbox_gdf_data, CONFIG_RENDER["general_layers_name"])
+        general_layers = reproject_all(general_layers, local_projection)
+    else:
+        general_layers = None
 
     for _, stop_row in stops_gdf_iterate.iterrows():
         transit_out_path = os.path.join(save_dir, f"transit_map_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
         _prepare_for_transit_map_and_render(args, stop_row, ctx_map, general_layers, local_projection, transit_out_path)
 
-    far_layers = get_data_map_by_bbox_gdf(args.area_id, city_bbox_gdf_data, CONFIG_RENDER["far_layers_name"])
-    far_layers = reproject_all(far_layers, local_projection)
+
+    if args.render_map:
+        far_layers = get_data_map_by_bbox_gdf(args.area_id, city_bbox_gdf_data, CONFIG_RENDER["far_layers_name"])
+        far_layers = reproject_all(far_layers, local_projection)
+    else:
+        far_layers = None
 
     for _, stop_row in stops_gdf_iterate.iterrows():
         far_plan_out_path = os.path.join(save_dir, f"far_plan_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
@@ -77,9 +84,12 @@ def generate_three_in_one(args):
         poster_out_path = os.path.join(save_dir, f"poster_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
 
         stop_bbox_gdf = get_stop_bbox_gdf(stop_row, local_projection, LOCAL_MAP_RADIUS)
-        detailed_layers = get_data_map_by_bbox_gdf(args.area_id, stop_bbox_gdf.to_crs(4326),
-                                                   CONFIG_RENDER["detailed_layers_name"])
-        detailed_layers = reproject_all(detailed_layers, local_projection)
+        if args.render_map:
+            detailed_layers = get_data_map_by_bbox_gdf(args.area_id, stop_bbox_gdf.to_crs(4326),
+                                                       CONFIG_RENDER["detailed_layers_name"])
+            detailed_layers = reproject_all(detailed_layers, local_projection)
+        else:
+            detailed_layers = None
 
         _prepare_for_detailed_map_and_render(args, stop_row, ctx_map, detailed_layers, local_projection,
                                              detailed_out_path)

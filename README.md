@@ -140,5 +140,11 @@ poetry run transport-posters --limit 1 --render-map --render-routes --area-id 16
 
 Через несколько минут в `output/` появятся результаты (см. раздел ниже).
 
+Чтобы посмотреть предварительно, то можно не генерировать карту. (Пару десятков секунд)
+
+```bash
+poetry run transport-posters --limit 1 --render-routes --area-id 1614795
+```
+
 </details>
 
