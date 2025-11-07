@@ -4,7 +4,7 @@ import geopandas as gpd
 from shapely.geometry.linestring import LineString
 from shapely.ops import substring
 
-from logger import log_function_call
+from transport_posters.logger import log_function_call
 
 logger = logging.getLogger(__name__)
 

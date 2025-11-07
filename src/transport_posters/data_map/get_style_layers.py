@@ -6,8 +6,8 @@ from typing import Dict, Any, Optional
 
 from matplotlib.font_manager import FontProperties
 
-from data_transport.get_bus_layers import CONFIG_PATHS
-from logger import log_function_call
+from transport_posters.data_transport.get_bus_layers import CONFIG_PATHS
+from transport_posters.logger import log_function_call
 
 logger = logging.getLogger(__name__)
 

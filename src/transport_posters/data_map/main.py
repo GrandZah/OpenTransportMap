@@ -1,10 +1,10 @@
 from matplotlib import pyplot as plt
 
-from data_map.get_data_map import get_data_map_by_bbox_gdf
-from load_configs import CONFIG_PATHS
-from logger import configure_root_logger
-from render_map.render_basemap import render_basemap
-from utils.utils_generate import get_bbox_gdf_with_buf
+from transport_posters.data_map.get_data_map import get_data_map_by_bbox_gdf
+from transport_posters.load_configs import CONFIG_PATHS
+from transport_posters.logger import configure_root_logger
+from transport_posters.render_map.render_basemap import render_basemap
+from transport_posters.utils.utils_generate import get_bbox_gdf_with_buf
 
 
 def local_rendering_map(figsize, save_dir, area_id, style_layers_name, layers, bbox):

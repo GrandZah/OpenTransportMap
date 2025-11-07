@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List
 from shapely.geometry import Polygon as _Poly, Point as _Pt
-from render_transport.stop_layout_opt import RectPX
+
+from transport_posters.render_transport.stop_layout_opt import RectPX
 
 
 @dataclass

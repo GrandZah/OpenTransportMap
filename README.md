@@ -7,13 +7,17 @@
 **Подробная схематика**  
 ![Detail schematic](docs/images/detail_schematic.png)
 
-**Как может выглядеть в реальном мире**  
-![Overview map](docs/images/overview_map.png)
+**Как может выглядеть в реальном мире**
+<details>
+  <summary>Посмотреть изображение</summary>
+  
+  ![Overview map](docs/images/overview_map.png)
+</details>
 
 ## Быстрый старт
 
 ```bash
-python ./src/transport_posters/main.py --area-id 2206549 --render-map --render-routes --limit 3
+poetry run transport-posters --limit 1 --render-map --render-routes --area-id 1614795
 ```
 
 ### Параметры
@@ -78,3 +82,63 @@ GeoTransportMap/
 │  ├─ general_city_layers.json
 │  ├─ general_city_layers_small.json
 ```
+
+
+## Как установить и запустить проект
+
+<details>
+  <summary>Подробнее...</summary>
+  
+### 0) Требования
+
+- **OS**: Linux, macOS или Windows 10/11
+- **Python**: 3.11 или 3.12 (рекомендуется 3.12)
+- **Poetry**: ≥ 1.6
+- **Git**: для клонирования репозитория
+- Интернет-доступ для загрузки данных OSM
+
+### 1) Клонируем репозиторий
+
+```bash
+git clone https://github.com/GrandZah/OpenTransportMap
+cd OpenTransportMap
+```
+
+### 2) Устанавливаем Poetry (если еще не установлен)
+
+- **macOS / Linux**:
+  ```bash
+  curl -sSL https://install.python-poetry.org | python3 -
+  ```
+  После установки добавьте Poetry в `PATH`, если требуется.
+
+- **Windows (PowerShell)**:
+  ```powershell
+  (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
+  ```
+  Перезапустите терминал.
+
+Проверка:
+```bash
+poetry --version
+```
+
+### 3) Устанавливаем зависимости проекта
+
+В корне репозитория:
+```bash
+poetry install
+```
+
+Poetry создаст виртуальное окружение и установит все зависимости из `pyproject.toml`.
+
+### 4) Запускаем из виртуального окружения
+
+```bash
+poetry run transport-posters --limit 1 --render-map --render-routes --area-id 1614795
+```
+
+Через несколько минут в `output/` появятся результаты (см. раздел ниже).
+
+</details>
+

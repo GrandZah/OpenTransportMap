@@ -1,19 +1,15 @@
 import logging
 
-from data_transport.get_bus_layers import get_bus_layers, get_from_cache_bus_layers
-from data_transport.сity_route_database import CityRouteDatabase
-from load_configs import load_config_paths
-from logger import configure_root_logger
+from transport_posters.data_transport.get_bus_layers import get_bus_layers, CityRouteDatabase
+from transport_posters.load_configs import load_config_paths
 
 CONFIG_PATHS = load_config_paths()
 logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
-    configure_root_logger()
-
     AREA_OSM_REL_ID = 1327509
 
-    ctx_map: CityRouteDatabase = get_from_cache_bus_layers(AREA_OSM_REL_ID)
+    ctx_map: CityRouteDatabase = get_bus_layers(AREA_OSM_REL_ID)
     stops = ctx_map.stops_gdf
     platforms = ctx_map.platforms_gdf
     routes = ctx_map.routes_gdf
