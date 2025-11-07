@@ -6,7 +6,8 @@ import geopandas as gpd
 
 from data_map.get_data_map import get_data_map_by_bbox_gdf
 from data_map.get_layers import LayersMap, reproject_all
-from data_transport.get_bus_layers import CityRouteDatabase, get_from_cache_bus_layers
+from data_transport.get_bus_layers import get_from_cache_bus_layers
+from data_transport.сity_route_database import CityRouteDatabase
 from load_configs import CONFIG_PATHS, CONFIG_RENDER
 from logger import log_function_call
 from render_map.render_basemap import render_basemap

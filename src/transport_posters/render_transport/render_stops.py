@@ -13,7 +13,7 @@ from matplotlib.transforms import Affine2D
 from matplotlib.path import Path
 from matplotlib.patches import PathPatch, Circle
 
-from data_transport.get_bus_layers import CityRouteDatabase
+from data_transport.сity_route_database import CityRouteDatabase
 from load_configs import FONT_INTER_BOLD
 from render_transport.stop_layout_opt import RectPX
 from utils.forbidden import ForbiddenCollector

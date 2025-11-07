@@ -4,7 +4,7 @@ import geopandas as gpd
 from pandas import Series
 
 from data_map.get_data_map import LayersMap
-from data_transport.get_bus_layers import CityRouteDatabase
+from data_transport.сity_route_database import CityRouteDatabase
 from load_configs import CONFIG_RENDER, PAPER_SIZES_INCH
 from logger import log_function_call
 from render_map.render_basemap import render_basemap

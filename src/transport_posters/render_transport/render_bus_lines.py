@@ -9,7 +9,7 @@ from shapely.geometry import LineString, Point
 import geopandas as gpd
 import matplotlib.patheffects as pe
 
-from data_transport.get_bus_layers import CityRouteDatabase
+from data_transport.сity_route_database import CityRouteDatabase
 from logger import log_function_call
 from render_transport.render_stop_point import render_stop_point
 

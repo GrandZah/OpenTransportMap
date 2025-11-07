@@ -1,11 +1,11 @@
 import logging
-
+import textwrap
 import pyproj
 from pyproj import Geod
 from typing import Dict, List, Tuple, Optional
 import geopandas as gpd
 from shapely.geometry import LineString, Point
-from shapely.ops import substring, transform, linemerge
+from shapely.ops import substring, transform
 
 from logger import log_function_call
 from utils.util_short_name import shorten_stop_name
@@ -69,6 +69,22 @@ class RouteHasNoGeometry(OSMParseError):
     def __init__(self, route_id: int, stop_count: int):
         super().__init__(f"Route {route_id} has not geometry and have {stop_count} stops; skip")
 
+def build_query_by_bbox(bbox: Dict[str, float]) -> str:
+    """We only request relation route=bus, related ways, and stop_position nodes."""
+    s, w, n, e = bbox["south"], bbox["west"], bbox["north"], bbox["east"]
+    return textwrap.dedent(
+        f"""
+        [out:json][timeout:180];
+        (
+          relation["type"="route"]["route"="bus"]({s},{w},{n},{e});
+        )->.routes;
+        (.routes; >>;)->.r_ways;
+        node["public_transport"="stop_position"]({s},{w},{n},{e});
+        out body;
+        .routes out tags;
+        .r_ways out body geom;
+    """
+    ).strip()
 
 @log_function_call
 def parse_osm(data: Dict, *, strict: bool = False) \
