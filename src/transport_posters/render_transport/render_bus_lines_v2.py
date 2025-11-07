@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import List, Dict, Tuple, Set, Iterable
 import numpy as np
 import pandas as pd
-from shapely.geometry import LineString, Point, box
+from shapely.geometry import LineString, Point
 from matplotlib.collections import LineCollection
 import matplotlib.patheffects as pe
 import geopandas as gpd
@@ -142,13 +142,14 @@ def _get_last_stops_for_routes_in_bbox(
     return result
 
 
-def _get_geometry_routes(ctx_map: CityRouteDatabase,
-                         route_ids: List[int],
-                         stop_id: int) -> Tuple[List[gpd.GeoSeries], Set[int]]:
+def _get_geometry_routes(ctx_map: CityRouteDatabase, route_ids: List[int], stop_id: int)\
+        -> Tuple[List[gpd.GeoSeries], Set[int], Dict[int, Set[int]]]:
+    """ Getting only next station down to route from station with this stop_id """
     routes_map = ctx_map.routes_map
     edges_map = ctx_map.edges_map
     visited_stops: Set[int] = set()
     all_geometry = []
+    routes_visited_stops: Dict[int, Set[int]] = dict()
 
     for rid in route_ids:
         route_sel = routes_map.get(rid)
@@ -162,7 +163,9 @@ def _get_geometry_routes(ctx_map: CityRouteDatabase,
             continue
 
         idx = stop_seq.index(stop_id)
-        visited_stops.update(stop_seq[idx + 1:])
+        next_stops = stop_seq[idx + 1:]
+        visited_stops.update(next_stops)
+        routes_visited_stops[rid] = set(next_stops)
 
         edges_route = edges_map.get(rid)
         if edges_route.empty:
@@ -178,7 +181,7 @@ def _get_geometry_routes(ctx_map: CityRouteDatabase,
         onward = edges_route[edges_route.edge_idx >= start_idx].sort_values("edge_idx")
         all_geometry.append(onward)
 
-    return all_geometry, visited_stops
+    return all_geometry, visited_stops, routes_visited_stops
 
 
 def _draw_routes(ax, all_geometry: List[gpd.GeoSeries]) -> None:
@@ -228,7 +231,7 @@ def render_bus_lines_v2(ax,
     route_ids = _get_routes_without_last_stop(stop_row, ctx_map.routes_gdf, stop_row.routes)
     logger.debug("Stop %s serves routes: %s", stop_id, route_ids)
 
-    all_geometry, visited_stops = _get_geometry_routes(ctx_map, route_ids, stop_id)
+    all_geometry, visited_stops, routes_visited_stops = _get_geometry_routes(ctx_map, route_ids, stop_id)
     _draw_routes(ax, all_geometry)
 
     inputs: List[StopLabelInput] = []
@@ -259,10 +262,13 @@ def render_bus_lines_v2(ax,
         platform_pt2: Point = platform_row2.iloc[0].geometry
 
         cur_route_ids = cur_stop_row.routes
-        visible_rids = list(set(route_ids) & set(cur_route_ids))
+
+        visible_rids = []
+        for rid in set(route_ids) & set(cur_route_ids):
+            if rid in routes_visited_stops and vis_stop_id in routes_visited_stops[rid]:
+                visible_rids.append(rid)
         if not visible_rids:
             continue
-
         bus_nums = [id2ref.get(rid, str(rid)) for rid in visible_rids]
 
         inputs.append(StopLabelInput(
@@ -313,7 +319,7 @@ def render_bus_lines_v2_only_last(ax,
     route_ids = _get_routes_without_last_stop(stop_row, ctx_map.routes_gdf, stop_row.routes)
     logger.debug("Stop %s serves routes: %s", stop_id, route_ids)
 
-    all_geometry, visited_stops = _get_geometry_routes(ctx_map, route_ids, stop_id)
+    all_geometry, visited_stops, routes_visited_stops = _get_geometry_routes(ctx_map, route_ids, stop_id)
     _draw_routes(ax, all_geometry)
 
     inputs: List[StopLabelInput] = []
@@ -345,7 +351,12 @@ def render_bus_lines_v2_only_last(ax,
         platform_pt2: Point = platform_row2.iloc[0].geometry
 
         cur_route_ids = cur_stop_row.routes
-        visible_rids = list(set(route_ids) & set(cur_route_ids))
+
+        visible_rids = []
+        for rid in set(route_ids) & set(cur_route_ids):
+            if rid in routes_visited_stops and vis_stop_id in routes_visited_stops[rid]:
+                visible_rids.append(rid)
+
         visible_rids = _get_routes_with_last_stop(cur_stop_row, visible_rids, ctx_map.routes_map)
         if not visible_rids:
             continue

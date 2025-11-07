@@ -69,6 +69,7 @@ def render_stop_point(ax, cur_stop_pt, platform_pt,
                 fontsize=config_render_stop.FONT_SIZE_LABEL, fontproperties=custom_font,
                 ha=ha, va=va, zorder=6, clip_on=True)
 
+    # Wrong
     bus_nums = [id2ref.get(rid, str(rid)) for rid in set(stop_route_ids) & set(cur_stop_route_ids)]
     if not bus_nums:
         return
