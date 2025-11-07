@@ -1,8 +1,9 @@
 from typing import List, Dict, Tuple
 from dataclasses import dataclass
 import matplotlib.font_manager as fm
-from load_configs import FONT_INTER_BOLD
-from utils.utils import natural_key
+
+from transport_posters.load_configs import FONT_INTER_BOLD
+from transport_posters.utils.utils import natural_key
 
 
 @dataclass(frozen=True)

@@ -4,8 +4,8 @@ import logging
 import geopandas as gpd
 from typing import List, Tuple
 
-from data_map.get_style_layers import LabelSpec
-from render_map.utils_text_label import (
+from transport_posters.data_map.get_style_layers import LabelSpec
+from transport_posters.render_map.utils_text_label import (
     _label_margin_m,
     _text_width_m,
     _text_height_m,

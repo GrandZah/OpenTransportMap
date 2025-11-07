@@ -3,7 +3,8 @@ from datetime import datetime
 from functools import wraps
 from pathlib import Path
 import time
-from load_configs import CONFIG_PATHS
+
+from transport_posters.load_configs import CONFIG_PATHS
 
 logger = logging.getLogger(__name__)
 

@@ -3,16 +3,16 @@ import os
 import geopandas as gpd
 import shapely
 
-from data_map.get_data_map import get_data_map_by_bbox_gdf
-from data_map.get_layers import reproject_all
-from data_transport.get_bus_layers import get_from_cache_bus_layers
-from data_transport.сity_route_database import CityRouteDatabase
-from logger import log_function_call
-from utils.utils import slugify
+from transport_posters.data_map.get_data_map import get_data_map_by_bbox_gdf
+from transport_posters.data_map.get_layers import reproject_all
+from transport_posters.data_transport.get_bus_layers import get_from_cache_bus_layers
+from transport_posters.data_transport.сity_route_database import CityRouteDatabase
+from transport_posters.logger import log_function_call
+from transport_posters.utils.utils import slugify
 from .compose_img_to_poster import compose_img_to_poster
 from .render_detailed_map import render_detailed_map
-from load_configs import CONFIG_PATHS, CONFIG_RENDER
-from utils.utils_generate import get_bbox_gdf_with_buf, get_local_projection_by_area_id, \
+from transport_posters.load_configs import CONFIG_PATHS, CONFIG_RENDER
+from transport_posters.utils.utils_generate import get_bbox_gdf_with_buf, get_local_projection_by_area_id, \
     expand_gdf_bounds_in_degrees
 from .render_far_plan import render_far_plan
 from .render_middle_transit_map import render_middle_transit_map

@@ -7,12 +7,12 @@ import json, requests
 from collections.abc import Callable
 from typing import Dict
 
-from data_transport.build_edges import build_edges_pairwise
-from data_transport.сity_route_database import CityRouteDatabase
-from data_transport.parser_osm import build_query_by_bbox, parse_osm
-from logger import log_function_call
-from utils.utils_generate import get_bbox_with_buf
-from load_configs import OVERPASS_URL, CONFIG_PATHS
+from transport_posters.data_transport.build_edges import build_edges_pairwise
+from transport_posters.data_transport.сity_route_database import CityRouteDatabase
+from transport_posters.data_transport.parser_osm import build_query_by_bbox, parse_osm
+from transport_posters.logger import log_function_call
+from transport_posters.utils.utils_generate import get_bbox_with_buf
+from transport_posters.load_configs import OVERPASS_URL, CONFIG_PATHS
 
 logger = logging.getLogger(__name__)
 TRANSPORT_DEGREE_BUFFER = 0.01

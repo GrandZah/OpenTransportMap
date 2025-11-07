@@ -9,8 +9,8 @@ from rtree.index import Index as _RTIndex
 from math import cos, sin, radians
 from shapely.geometry import Polygon as _Poly
 
-from data_map.get_style_layers import LabelSpec
-from utils.utils_rendering import points_per_meter, meters_to_px
+from transport_posters.data_map.get_style_layers import LabelSpec
+from transport_posters.utils.utils_rendering import points_per_meter, meters_to_px
 
 CONFIG_RENDER_LABELS = {
 

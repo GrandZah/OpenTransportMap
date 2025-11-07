@@ -9,14 +9,13 @@ import matplotlib.font_manager as fm
 from matplotlib.textpath import TextPath
 from matplotlib.transforms import Bbox
 from matplotlib import patheffects as pe
-
 from shapely.geometry import Point
 
-from load_configs import FONT_INTER_BOLD
-from utils.forbidden import ForbiddenCollector
-from utils.utils import natural_key
+from transport_posters.load_configs import FONT_INTER_BOLD
+from transport_posters.utils.forbidden import ForbiddenCollector
+from transport_posters.utils.utils import natural_key
 
-from render_transport.stop_layout_opt import (
+from transport_posters.render_transport.stop_layout_opt import (
     RectPX, CandidatePair,
     precompute_costs, optimize_all, cost_breakdown_per_stop
 )

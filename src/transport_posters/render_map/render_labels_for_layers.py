@@ -4,13 +4,13 @@ import logging
 from typing import Optional
 import geopandas as gpd
 
-from data_map.get_layers import LayersMap, GeoLayer
-from data_map.get_style_layers import LabelSpec
-from logger import log_function_call
-from render_map.render_labels_lines import label_lines
-from render_map.render_labels_points_polygons import label_points, label_polygons
-from render_map.utils_text_label import _LabelCollider
-from utils.utils_rendering import points_per_meter
+from transport_posters.data_map.get_layers import LayersMap, GeoLayer
+from transport_posters.data_map.get_style_layers import LabelSpec
+from transport_posters.logger import log_function_call
+from transport_posters.render_map.render_labels_lines import label_lines
+from transport_posters.render_map.render_labels_points_polygons import label_points, label_polygons
+from transport_posters.render_map.utils_text_label import _LabelCollider
+from transport_posters.utils.utils_rendering import points_per_meter
 
 logger = logging.getLogger(__name__)
 

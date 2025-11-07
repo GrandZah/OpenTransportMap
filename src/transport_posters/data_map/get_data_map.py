@@ -2,10 +2,10 @@ import logging
 from pathlib import Path
 import geopandas as gpd
 
-from load_configs import CONFIG_PATHS
-from logger import log_function_call
-from utils.utils_generate import get_bbox_gdf_with_buf
-from utils.utils_projection import ensure_epsg4326
+from transport_posters.load_configs import CONFIG_PATHS
+from transport_posters.logger import log_function_call
+from transport_posters.utils.utils_generate import get_bbox_gdf_with_buf
+from transport_posters.utils.utils_projection import ensure_epsg4326
 from .get_layers import get_layers, LayersMap
 from .get_style_layers import get_style_layers
 

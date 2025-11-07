@@ -2,21 +2,19 @@ import logging
 from dataclasses import dataclass
 from typing import List, Set, Tuple
 import math
-
 import pandas as pd
 import geopandas as gpd
 from shapely.geometry import box, MultiPoint, Point
-
 import matplotlib.font_manager as fm
 from matplotlib.textpath import TextPath
 from matplotlib.transforms import Affine2D
 from matplotlib.path import Path
 from matplotlib.patches import PathPatch, Circle
 
-from data_transport.сity_route_database import CityRouteDatabase
-from load_configs import FONT_INTER_BOLD
-from render_transport.stop_layout_opt import RectPX
-from utils.forbidden import ForbiddenCollector
+from transport_posters.data_transport.сity_route_database import CityRouteDatabase
+from transport_posters.load_configs import FONT_INTER_BOLD
+from transport_posters.render_transport.stop_layout_opt import RectPX
+from transport_posters.utils.forbidden import ForbiddenCollector
 
 
 @dataclass(frozen=True)

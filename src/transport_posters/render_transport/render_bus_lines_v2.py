@@ -8,14 +8,14 @@ from matplotlib.collections import LineCollection
 import matplotlib.patheffects as pe
 import geopandas as gpd
 
-from data_transport.сity_route_database import CityRouteDatabase
-from logger import log_function_call
+from transport_posters.data_transport.сity_route_database import CityRouteDatabase
+from transport_posters.logger import log_function_call
 
-from render_transport.render_stop_point_v2 import (
+from transport_posters.render_transport.render_stop_point_v2 import (
     StopLabelInput,
     layout_and_render_stop_pairs,
 )
-from utils.forbidden import ForbiddenCollector
+from transport_posters.utils.forbidden import ForbiddenCollector
 
 logger = logging.getLogger(__name__)
 
