@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from pandas import Series
 import geopandas as gpd
 
+from transport_posters.render_pictographs.render_pictographs import render_pictographs, \
+    get_df_pictographs_in_bbox, reproject_to_local_projection
 from transport_posters.data_map.get_data_map import get_data_map_by_bbox_gdf
 from transport_posters.data_map.get_layers import LayersMap, reproject_all
 from transport_posters.data_transport.get_bus_layers import get_from_cache_bus_layers
@@ -35,17 +37,20 @@ def generate_maps(args):
     layers = get_data_map_by_bbox_gdf(args.area_id, routes_bbox_gdf, CONFIG_RENDER["general_layers_name"])
     layers = reproject_all(layers, local_projection)
 
+    pictographs_df = get_df_pictographs_in_bbox(routes_bbox_gdf)
+    pictographs_df = reproject_to_local_projection(pictographs_df, local_projection)
+
     stops_gdf = ctx_map.stops_gdf
     stops_gdf_iterate = stops_gdf.head(args.limit) if args.limit else stops_gdf
     logger.info(f"Rendering {len(stops_gdf_iterate)} stops …")
     for _, stop_row in stops_gdf_iterate.iterrows():
-        _render_stop_map(stop_row, ctx_map, layers, local_routes_bbox_gdf, args, save_dir)
+        _render_stop_map(stop_row, ctx_map, layers,pictographs_df, local_routes_bbox_gdf, args, save_dir)
 
     if args.gallery and save_dir:
         generate_gallery(save_dir)
 
 
-def _render_stop_map(stop_row: Series, ctx_map: CityRouteDatabase, layers: LayersMap,
+def _render_stop_map(stop_row: Series, ctx_map: CityRouteDatabase, layers: LayersMap, pictographs_df : gpd.GeoDataFrame,
                      bbox_gdf: gpd.GeoDataFrame, args, save_dir: str):
     fig, ax = plt.subplots(figsize=CONFIG_RENDER["figsize"], dpi=CONFIG_RENDER.get("dpi", 150))
 
@@ -61,6 +66,7 @@ def _render_stop_map(stop_row: Series, ctx_map: CityRouteDatabase, layers: Layer
         render_bus_lines(ax, stop_row, ctx_map)
     if args.render_map:
         render_labels_for_layers(ax, layers, bbox_gdf)
+        render_pictographs(ax, pictographs_df)
 
     out_path = os.path.join(save_dir, f"{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
     fig.savefig(out_path, bbox_inches="tight", pad_inches=0)

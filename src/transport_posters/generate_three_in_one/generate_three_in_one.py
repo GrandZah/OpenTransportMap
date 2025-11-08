@@ -3,6 +3,7 @@ import os
 import geopandas as gpd
 import shapely
 
+from transport_posters.render_pictographs.render_pictographs import get_df_pictographs_in_bbox, reproject_to_local_projection
 from transport_posters.data_map.get_data_map import get_data_map_by_bbox_gdf
 from transport_posters.data_map.get_layers import reproject_all
 from transport_posters.data_transport.get_bus_layers import get_from_cache_bus_layers
@@ -58,49 +59,53 @@ def generate_three_in_one(args):
     if args.render_map:
         general_layers = get_data_map_by_bbox_gdf(args.area_id, city_bbox_gdf_data, CONFIG_RENDER["general_layers_name"])
         general_layers = reproject_all(general_layers, local_projection)
+
+        pictographs_df = get_df_pictographs_in_bbox(city_bbox_gdf_data)
+        pictographs_df = reproject_to_local_projection(pictographs_df, local_projection)
     else:
         general_layers = None
+        pictographs_df = None
 
     for _, stop_row in stops_gdf_iterate.iterrows():
         transit_out_path = os.path.join(save_dir, f"transit_map_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
-        _prepare_for_transit_map_and_render(args, stop_row, ctx_map, general_layers, local_projection, transit_out_path)
+        _prepare_for_transit_map_and_render(args, stop_row, ctx_map, general_layers,pictographs_df, local_projection, transit_out_path)
+
+    #
+    # if args.render_map:
+    #     far_layers = get_data_map_by_bbox_gdf(args.area_id, city_bbox_gdf_data, CONFIG_RENDER["far_layers_name"])
+    #     far_layers = reproject_all(far_layers, local_projection)
+    # else:
+    #     far_layers = None
+    #
+    # for _, stop_row in stops_gdf_iterate.iterrows():
+    #     far_plan_out_path = os.path.join(save_dir, f"far_plan_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
+    #     _prepare_for_far_plan_and_render(args, stop_row, ctx_map, far_layers, local_projection, far_plan_out_path,
+    #                                      city_bbox_gdf_render.to_crs(local_projection))
+    #
+    # for _, stop_row in stops_gdf_iterate.iterrows():
+    #     transit_out_path = os.path.join(save_dir, f"transit_map_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
+    #     detailed_out_path = os.path.join(save_dir, f"detailed_map_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
+    #     far_plan_out_path = os.path.join(save_dir, f"far_plan_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
+    #     poster_out_path = os.path.join(save_dir, f"poster_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
+    #
+    #     stop_bbox_gdf = get_stop_bbox_gdf(stop_row, local_projection, LOCAL_MAP_RADIUS)
+    #     if args.render_map:
+    #         detailed_layers = get_data_map_by_bbox_gdf(args.area_id, stop_bbox_gdf.to_crs(4326),
+    #                                                    CONFIG_RENDER["detailed_layers_name"])
+    #         detailed_layers = reproject_all(detailed_layers, local_projection)
+    #     else:
+    #         detailed_layers = None
+    #
+    #     _prepare_for_detailed_map_and_render(args, stop_row, ctx_map, detailed_layers, local_projection,
+    #                                          detailed_out_path)
+    #
+    #     compose_img_to_poster(transit_out_path, detailed_out_path, far_plan_out_path, poster_out_path)
 
 
-    if args.render_map:
-        far_layers = get_data_map_by_bbox_gdf(args.area_id, city_bbox_gdf_data, CONFIG_RENDER["far_layers_name"])
-        far_layers = reproject_all(far_layers, local_projection)
-    else:
-        far_layers = None
-
-    for _, stop_row in stops_gdf_iterate.iterrows():
-        far_plan_out_path = os.path.join(save_dir, f"far_plan_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
-        _prepare_for_far_plan_and_render(args, stop_row, ctx_map, far_layers, local_projection, far_plan_out_path,
-                                         city_bbox_gdf_render.to_crs(local_projection))
-
-    for _, stop_row in stops_gdf_iterate.iterrows():
-        transit_out_path = os.path.join(save_dir, f"transit_map_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
-        detailed_out_path = os.path.join(save_dir, f"detailed_map_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
-        far_plan_out_path = os.path.join(save_dir, f"far_plan_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
-        poster_out_path = os.path.join(save_dir, f"poster_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
-
-        stop_bbox_gdf = get_stop_bbox_gdf(stop_row, local_projection, LOCAL_MAP_RADIUS)
-        if args.render_map:
-            detailed_layers = get_data_map_by_bbox_gdf(args.area_id, stop_bbox_gdf.to_crs(4326),
-                                                       CONFIG_RENDER["detailed_layers_name"])
-            detailed_layers = reproject_all(detailed_layers, local_projection)
-        else:
-            detailed_layers = None
-
-        _prepare_for_detailed_map_and_render(args, stop_row, ctx_map, detailed_layers, local_projection,
-                                             detailed_out_path)
-
-        compose_img_to_poster(transit_out_path, detailed_out_path, far_plan_out_path, poster_out_path)
-
-
-def _prepare_for_transit_map_and_render(args, stop_row, ctx_map, layers, local_projection, transit_map_out_path):
+def _prepare_for_transit_map_and_render(args, stop_row, ctx_map, layers,pictographs_df, local_projection, transit_map_out_path):
     stop_bbox_gdf = get_stop_bbox_gdf(stop_row, local_projection, TRANSIT_MAP_RADIUS)
     figsize = [20, 20]
-    render_middle_transit_map(stop_row, ctx_map, layers, stop_bbox_gdf, args, transit_map_out_path,
+    render_middle_transit_map(stop_row, ctx_map, layers ,pictographs_df, stop_bbox_gdf, args, transit_map_out_path,
                               figsize_poster=figsize)
 
 

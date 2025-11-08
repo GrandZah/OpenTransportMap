@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import geopandas as gpd
 from pandas import Series
 
+from transport_posters.render_pictographs.render_pictographs import render_pictographs
 from transport_posters.data_map.get_data_map import LayersMap
 from transport_posters.data_transport.сity_route_database import CityRouteDatabase
 from transport_posters.load_configs import CONFIG_RENDER, PAPER_SIZES_INCH
@@ -27,7 +28,7 @@ def _settings_ax(ax, bbox_gdf):
 
 
 @log_function_call
-def render_middle_transit_map(stop_row: Series, ctx_map: CityRouteDatabase, layers: LayersMap,
+def render_middle_transit_map(stop_row: Series, ctx_map: CityRouteDatabase, layers: LayersMap ,pictographs_df ,
                               bbox_gdf: gpd.GeoDataFrame, args, out_path: str, figsize_poster=None):
     """Render a medium-scale transit map with routes and walking overlay."""
     figsize = figsize_poster or PAPER_SIZES_INCH.get(getattr(args, "paper", "A2"), PAPER_SIZES_INCH["A1"])
@@ -50,6 +51,8 @@ def render_middle_transit_map(stop_row: Series, ctx_map: CityRouteDatabase, laye
         render_labels_for_layers(ax, layers, fitted_bbox, forbidden_px=forbidden.geoms)
         render_walk_5min_focus_gap(ax, stop_row, color="#d7263d",
                                    dash_on_off=(36.0, 22.0), dash_offset=6.0, gap_width_deg=0, label_text="")
+        render_pictographs(ax, pictographs_df)
+
     fig.savefig(out_path, pad_inches=0)
     plt.close(fig)
     logger.info("Saved %s", out_path)

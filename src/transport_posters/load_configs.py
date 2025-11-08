@@ -1,5 +1,8 @@
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Union
+
+from pyproj import CRS
 
 
 @dataclass
@@ -14,6 +17,8 @@ class ConfigPaths:
     output_maps_dir: Path
     output_composed_img_dir: Path
     style_assets_fonts_dir: Path
+    style_pictographs_dir: Path
+    style_pictographs_img_dir: Path
 
     @classmethod
     def from_base(cls, base: Path) -> "ConfigPaths":
@@ -27,7 +32,9 @@ class ConfigPaths:
             output_logs_dir=base / "output" / "logs",
             output_maps_dir=base / "output" / "maps",
             output_composed_img_dir=base / "output" / "composed_img",
-            style_assets_fonts_dir=base / "style" / "assets" / "fonts"
+            style_assets_fonts_dir=base / "style" / "assets" / "fonts",
+            style_pictographs_dir=base / "style" / "pictographs",
+            style_pictographs_img_dir = base / "style" / "pictographs" / "img"
         )
 
     def ensure_dirs(self):
@@ -49,7 +56,8 @@ def load_config_render() -> dict:
         "figsize": (20, 20),
         "general_layers_name": "general_city_layers",
         "far_layers_name": "far_city_layers_labeled",
-        "detailed_layers_name": "detailed_city_layers_v2"
+        "detailed_layers_name": "detailed_city_layers_v2",
+        "pictographs_csv": "vologda_pictographs.csv"
     }
 
 
@@ -69,3 +77,5 @@ PAPER_SIZES_INCH = {
     "Letter": (8.5, 11),
     "Legal": (8.5, 14),
 }
+
+CRSLike = Union[int, str, dict, CRS]
