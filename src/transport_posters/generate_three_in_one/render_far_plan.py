@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import geopandas as gpd
 from pandas import Series
 
+from transport_posters.render_pictographs.render_pictographs import render_pictographs
 from transport_posters.data_map.get_data_map import LayersMap
 from transport_posters.data_transport.сity_route_database import CityRouteDatabase
 from transport_posters.load_configs import CONFIG_RENDER, PAPER_SIZES_INCH
@@ -26,7 +27,7 @@ def _settings_ax(ax, bbox_gdf):
 
 
 @log_function_call
-def render_far_plan(stop_row: Series, ctx_map: CityRouteDatabase, layers: LayersMap,
+def render_far_plan(stop_row: Series, ctx_map: CityRouteDatabase, layers: LayersMap,pictographs_df,
                     bbox_gdf: gpd.GeoDataFrame, transit_bbox, args, out_path: str, figsize_poster=None):
     """Render a far-scale map with only terminal routes and boundaries."""
     figsize = figsize_poster or PAPER_SIZES_INCH.get(getattr(args, "paper", "A4"), PAPER_SIZES_INCH["A4"])
@@ -48,6 +49,7 @@ def render_far_plan(stop_row: Series, ctx_map: CityRouteDatabase, layers: Layers
     if args.render_map:
         render_labels_for_layers(ax, layers, fitted_bbox, forbidden_px=forbidden.geoms)
         draw_gdf_boundaries_dashed(ax, transit_bbox)
+        render_pictographs(ax, pictographs_df, 1250)
 
     fig.savefig(out_path, pad_inches=0)
     plt.close(fig)

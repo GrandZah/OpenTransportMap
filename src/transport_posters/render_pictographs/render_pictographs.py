@@ -13,12 +13,12 @@ logger = logging.getLogger(__name__)
 
 
 @log_function_call
-def render_pictographs(ax, df_pictographs):
+def render_pictographs(ax, df_pictographs, size=250):
     """
     Render pictographs on the given Matplotlib Axes within bbox (GeoDataFrame in EPSG:3857).
     """
     for _, row in df_pictographs.iterrows():
-        _draw_pictographs(ax, row)
+        _draw_pictographs(ax, row,size=size)
 
 # def _draw_pictographs(ax, row: pd.Series) -> None:
 #     """ Draw img on ax """
@@ -31,7 +31,7 @@ def render_pictographs(ax, df_pictographs):
 #     ab = AnnotationBbox(imagebox, (x, y), frameon=False, pad=0)
 #     ax.add_artist(ab)
 
-def _draw_pictographs(ax, row: pd.Series) -> None:
+def _draw_pictographs(ax, row: pd.Series,size=250) -> None:
     """ Draw img on ax """
     path_name = row["img_path"]
     img = _get_image(path_name)
@@ -39,7 +39,7 @@ def _draw_pictographs(ax, row: pd.Series) -> None:
         return
     name = row.get("name_pictograph", "").strip().rstrip(",").strip()
     x, y = row.geometry.x, row.geometry.y
-    SIZE_METERS = 250
+    SIZE_METERS = size
     # GAP_METERS = 10.0
     half_size = SIZE_METERS / 2
     extent = [x - half_size, x + half_size, y - half_size, y + half_size]
@@ -61,13 +61,10 @@ def _get_image(path_name: str):
 
 
 
-def get_df_pictographs_in_bbox(bbox: gpd.GeoDataFrame) -> gpd.GeoDataFrame | None:
+def get_df_pictographs_in_bbox(bbox: gpd.GeoDataFrame, csv_filename) -> gpd.GeoDataFrame | None:
     """
     Get pictographs from "csv_path", which in (GeoDataFrame in EPSG:4326).
     """
-    if "pictographs_csv" not in CONFIG_RENDER:
-        return None
-    csv_filename = CONFIG_RENDER["pictographs_csv"]
     df_path = Path(CONFIG_PATHS.style_pictographs_dir) / csv_filename
     if not df_path.exists():
         logger.warning(f"File not found: {df_path}")

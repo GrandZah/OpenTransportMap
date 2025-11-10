@@ -57,7 +57,8 @@ def load_config_render() -> dict:
         "general_layers_name": "general_city_layers",
         "far_layers_name": "far_city_layers_labeled",
         "detailed_layers_name": "detailed_city_layers_v2",
-        "pictographs_csv": "vologda_pictographs.csv"
+        "pictographs_csv": "vologda_pictographs.csv",
+        "far_pictographs_csv": "far_vologda_pictographs.csv"
     }
 
 
