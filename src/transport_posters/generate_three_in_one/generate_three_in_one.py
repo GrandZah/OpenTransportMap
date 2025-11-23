@@ -3,7 +3,8 @@ import os
 import geopandas as gpd
 import shapely
 
-from transport_posters.render_pictographs.render_pictographs import get_df_pictographs_in_bbox, reproject_to_local_projection
+from transport_posters.render_pictographs.render_pictographs import get_df_pictographs_in_bbox, \
+    reproject_to_local_projection, get_df_pictographs_outside_bbox
 from transport_posters.data_map.get_data_map import get_data_map_by_bbox_gdf
 from transport_posters.data_map.get_layers import reproject_all
 from transport_posters.data_transport.get_bus_layers import get_from_cache_bus_layers
@@ -26,6 +27,7 @@ DEGREES_BUF = 0.08
 
 
 def get_stop_bbox_gdf(stop_row, local_proj, buffer_m=0):
+    """ Get stop_row in local_proj and add buffer in meters. Return in local_proj"""
     minx = maxx = stop_row.geometry.x
     miny = maxy = stop_row.geometry.y
     if buffer_m:
@@ -59,31 +61,23 @@ def generate_three_in_one(args):
     if args.render_map:
         general_layers = get_data_map_by_bbox_gdf(args.area_id, city_bbox_gdf_data, CONFIG_RENDER["general_layers_name"])
         general_layers = reproject_all(general_layers, local_projection)
-
-        pictographs_df = get_df_pictographs_in_bbox(city_bbox_gdf_data, CONFIG_RENDER["pictographs_csv"])
-        pictographs_df = reproject_to_local_projection(pictographs_df, local_projection)
     else:
         general_layers = None
-        pictographs_df = None
 
     for _, stop_row in stops_gdf_iterate.iterrows():
         transit_out_path = os.path.join(save_dir, f"transit_map_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
-        _prepare_for_transit_map_and_render(args, stop_row, ctx_map, general_layers,pictographs_df, local_projection, transit_out_path)
+        _prepare_for_transit_map_and_render(args, stop_row, ctx_map, general_layers, local_projection, transit_out_path)
 
 
     if args.render_map:
         far_layers = get_data_map_by_bbox_gdf(args.area_id, city_bbox_gdf_data, CONFIG_RENDER["far_layers_name"])
         far_layers = reproject_all(far_layers, local_projection)
-
-        pictographs_far_df = get_df_pictographs_in_bbox(city_bbox_gdf_data, CONFIG_RENDER["far_pictographs_csv"])
-        pictographs_far_df = reproject_to_local_projection(pictographs_far_df, local_projection)
     else:
         far_layers = None
-        pictographs_far_df = None
 
     for _, stop_row in stops_gdf_iterate.iterrows():
         far_plan_out_path = os.path.join(save_dir, f"far_plan_{stop_row.stop_id}_{slugify(stop_row['name'])}.png")
-        _prepare_for_far_plan_and_render(args, stop_row, ctx_map, far_layers, pictographs_far_df, local_projection, far_plan_out_path,
+        _prepare_for_far_plan_and_render(args, stop_row, ctx_map, far_layers, local_projection, far_plan_out_path,
                                          city_bbox_gdf_render.to_crs(local_projection))
 
     for _, stop_row in stops_gdf_iterate.iterrows():
@@ -106,9 +100,12 @@ def generate_three_in_one(args):
         compose_img_to_poster(transit_out_path, detailed_out_path, far_plan_out_path, poster_out_path)
 
 
-def _prepare_for_transit_map_and_render(args, stop_row, ctx_map, layers,pictographs_df, local_projection, transit_map_out_path):
+def _prepare_for_transit_map_and_render(args, stop_row, ctx_map, layers, local_projection, transit_map_out_path):
     stop_bbox_gdf = get_stop_bbox_gdf(stop_row, local_projection, TRANSIT_MAP_RADIUS)
     figsize = [20, 20]
+
+    pictographs_df = get_df_pictographs_in_bbox(stop_bbox_gdf, CONFIG_RENDER["pictographs_csv"])
+    pictographs_df = reproject_to_local_projection(pictographs_df, local_projection)
     render_middle_transit_map(stop_row, ctx_map, layers ,pictographs_df, stop_bbox_gdf, args, transit_map_out_path,
                               figsize_poster=figsize)
 
@@ -119,11 +116,15 @@ def _prepare_for_detailed_map_and_render(args, stop_row, ctx_map, layers, local_
     render_detailed_map(stop_row, ctx_map, layers, stop_bbox_gdf, args, detailed_map_out_path, figsize_poster=figsize)
 
 
-def _prepare_for_far_plan_and_render(args, stop_row, ctx_map, layers,pictographs_df, local_projection, far_plan_out_path,
+def _prepare_for_far_plan_and_render(args, stop_row, ctx_map, layers, local_projection, far_plan_out_path,
                                      city_bbox_gdf):
     stop_bbox_gdf = get_stop_bbox_gdf(stop_row, local_projection, TRANSIT_MAP_RADIUS)
     figsize = [10, 10]
-    render_far_plan(stop_row, ctx_map, layers,pictographs_df, city_bbox_gdf, stop_bbox_gdf, args, far_plan_out_path,
+
+    pictographs_far_df = get_df_pictographs_outside_bbox(stop_bbox_gdf, CONFIG_RENDER["pictographs_csv"])
+    pictographs_far_df = reproject_to_local_projection(pictographs_far_df, local_projection)
+
+    render_far_plan(stop_row,ctx_map ,layers ,pictographs_far_df, city_bbox_gdf, stop_bbox_gdf, args, far_plan_out_path,
                     figsize_poster=figsize)
 
 

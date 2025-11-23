@@ -168,18 +168,7 @@
       },
       "color": "#E6DFF0",
       "gtype": "polygon",
-      "zorder": 1,
-      "label": {
-        "field": "name",
-        "placement": "centroid",
-        "size_pt": 11,
-        "color": "#3a4b58",
-        "halo_color": "#ffffff",
-        "halo_width": 2.2,
-        "weight": "bold",
-        "alpha": 0.95,
-        "zorder": 3.3
-      }
+      "zorder": 1
     },
     "place_suburb": {
       "tags": {

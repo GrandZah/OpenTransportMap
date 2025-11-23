@@ -37,7 +37,7 @@ def generate_maps(args):
     layers = get_data_map_by_bbox_gdf(args.area_id, routes_bbox_gdf, CONFIG_RENDER["general_layers_name"])
     layers = reproject_all(layers, local_projection)
 
-    pictographs_df = get_df_pictographs_in_bbox(routes_bbox_gdf)
+    pictographs_df = get_df_pictographs_in_bbox(routes_bbox_gdf, CONFIG_RENDER["pictographs_csv"])
     pictographs_df = reproject_to_local_projection(pictographs_df, local_projection)
 
     stops_gdf = ctx_map.stops_gdf
