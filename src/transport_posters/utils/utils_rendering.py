@@ -58,3 +58,11 @@ def fit_bbox_to_aspect(bbox_gdf: gpd.GeoDataFrame, aspect: float, bleed: float =
         minx, maxx, miny, maxy = minx - dx, maxx + dx, miny - dy, maxy + dy
 
     return gpd.GeoDataFrame(geometry=[shapely.geometry.box(minx, miny, maxx, maxy)], crs=bbox_gdf.crs)
+
+def settings_ax(ax, bbox_gdf):
+    minx, miny, maxx, maxy = bbox_gdf.total_bounds
+    ax.set_aspect('equal', adjustable='datalim')
+    ax.set_xlim(minx, maxx)
+    ax.set_ylim(miny, maxy)
+    ax.set_axis_off()
+    ax.margins(0)
