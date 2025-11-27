@@ -30,15 +30,15 @@ class RenderStopConfig:
     STOP_SIZE: float = 45.0
     STOP_COLOR: str = "#34a853"
 
-    FONT_SIZE_LABEL: float = 24.0
-    FONT_SIZE_BUS: float = 18.0
+    FONT_SIZE_LABEL: float = 18
+    FONT_SIZE_BUS: float = 14
 
-    BUS_BOX_STYLE: str = "round"
+    BUS_BOX_STYLE: str = "round4"
     BUS_BOX_PAD_FRAC: float = 0.2
     BUS_BOX_FACE: str = "white"
     BUS_BOX_EDGE: str = "gray"
-    BUS_BOX_ALPHA: float = 0.8
-    BUS_BOX_LINEWIDTH: float = 0.8
+    BUS_BOX_ALPHA: float = 0.9
+    BUS_BOX_LINEWIDTH: float = 0.5
 
     ROUTES_SEP: str = ". "
     ROUTES_MAX_LINES: int = 3

@@ -5,7 +5,7 @@
 ## Примеры изображений
 
 **Подробная схематика**  
-![Detail schematic](docs/images/map_with_pictographs.png)
+![Detail schematic](docs/images/map_with_pictographs2.png)
 
 **Как может выглядеть в реальном мире**
 <details>
