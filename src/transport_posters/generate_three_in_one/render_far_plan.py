@@ -38,9 +38,9 @@ def render_far_plan(stop_row: Series, ctx_map: CityRouteDatabase, layers: Layers
     if args.render_routes:
         render_bus_lines_v2_only_last(ax, stop_row, ctx_map, bbox_gdf, forbidden=forbidden)
     if args.render_map:
-        render_labels_for_layers(ax, layers, fitted_bbox, forbidden_px=forbidden.geoms)
+        render_pictographs(ax, pictographs_df, 1250, forbidden=forbidden)
+        render_labels_for_layers(ax, layers, fitted_bbox, forbidden=forbidden)
         draw_gdf_boundaries_dashed(ax, transit_bbox)
-        render_pictographs(ax, pictographs_df, 1250)
 
     fig.savefig(out_path, pad_inches=0)
     plt.close(fig)

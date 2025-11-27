@@ -7,10 +7,11 @@ from transport_posters.data_map.get_style_layers import LabelSpec
 from transport_posters.render_map.utils_text_label import _label_margin_m, CONFIG_RENDER_LABELS, _NameDeduper, _text_width_m, \
     _text_height_m, _straight_segment, _text_footprint, _footprint_fits, _text_footprint_px, _draw_label, _LabelCollider
 from transport_posters.utils.utils_rendering import meters_to_px
+from transport_posters.utils.forbidden import ForbiddenCollector
 
 
 def label_lines(ax: plt.Axes, gdf: gpd.GeoDataFrame, spec: LabelSpec, field: str,
-                stats: dict, bbox_geom, *, ppm: float, collider: _LabelCollider):
+                stats: dict, bbox_geom, *, ppm: float, forbidden: ForbiddenCollector):
     margin_m = _label_margin_m(spec, ppm)
 
     min_px = float(np.clip(
@@ -76,11 +77,14 @@ def label_lines(ax: plt.Axes, gdf: gpd.GeoDataFrame, spec: LabelSpec, field: str
             x0, y0 = ax.transData.transform((p0.x, p0.y))
             x1, y1 = ax.transData.transform((p1.x, p1.y))
             angle = np.degrees(np.arctan2(y1 - y0, x1 - x0))
-            if angle > 90: angle -= 180
-            if angle < -90: angle += 180
+            if angle > 90:
+                angle -= 180
+            if angle < -90:
+                angle += 180
             angle = float(np.clip(angle, -spec.max_angle, spec.max_angle))
 
-            fp = _text_footprint(cx, cy, w_m, text_h_m, angle_deg=angle, align=getattr(spec, "align", "center"))
+            fp = _text_footprint(cx, cy, w_m, text_h_m, angle_deg=angle,
+                                 align=getattr(spec, "align", "center"))
             if not _footprint_fits(bbox_geom, fp, margin_m):
                 stats["bbox_cross"] = stats.get("bbox_cross", 0) + 1
                 continue
@@ -89,15 +93,17 @@ def label_lines(ax: plt.Axes, gdf: gpd.GeoDataFrame, spec: LabelSpec, field: str
                 stats["dedup_skip"] += 1
                 continue
 
-            fp_px = _text_footprint_px(ax, cx, cy, w_m, text_h_m, angle, getattr(spec, "align", "center"), ppm)
-            if collider.conflicts(fp_px):
+            fp_px = _text_footprint_px(ax, cx, cy, w_m, text_h_m, angle,
+                                       getattr(spec, "align", "center"), ppm)
+
+            if not forbidden.is_free_geom(fp_px):
                 stats["overlap_skip"] = stats.get("overlap_skip", 0) + 1
                 continue
 
             txt = _draw_label(ax, cx, cy, text, spec)
             if txt:
                 txt.set_rotation(angle)
-                collider.add(fp_px)
+                forbidden.add_poly(fp_px)
                 stats["placed"] += 1
                 stats["attempted"] += 1
                 placed_here = True

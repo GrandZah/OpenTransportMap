@@ -39,9 +39,9 @@ def render_detailed_map(stop_row: Series, ctx_map: CityRouteDatabase, layers: La
     if args.render_routes:
         render_stops(ax, stop_row, ctx_map, fitted_bbox, forbidden=forbidden)
     if args.render_map:
-        render_labels_for_layers(ax, layers, fitted_bbox, forbidden_px=forbidden.geoms)
+        render_labels_for_layers(ax, layers, fitted_bbox, forbidden=forbidden)
         render_walk_5min_focus_gap(ax, stop_row, color="#d7263d",
-                                   dash_on_off=(36.0, 22.0), dash_offset=6.0)
+                                   dash_on_off=(36.0, 22.0), dash_offset=6.0, label_text="~5 минут")
     fig.savefig(out_path, pad_inches=0)
     plt.close(fig)
     logger.info("Saved %s", out_path)

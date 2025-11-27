@@ -2,25 +2,25 @@ import logging
 from pathlib import Path
 import pandas as pd
 from matplotlib import pyplot as plt
-from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 import geopandas as gpd
 
-
-from transport_posters.load_configs import CONFIG_PATHS, CONFIG_RENDER, CRSLike
+from transport_posters.render_transport.stop_layout_opt import RectPX
+from transport_posters.load_configs import CONFIG_PATHS, CRSLike
 from transport_posters.logger import log_function_call
+from transport_posters.utils.forbidden import ForbiddenCollector
 
 logger = logging.getLogger(__name__)
 
 
 @log_function_call
-def render_pictographs(ax, df_pictographs, size=250):
+def render_pictographs(ax, df_pictographs, size: float = 250, forbidden: ForbiddenCollector | None=None):
     """
     Render pictographs on the given Matplotlib Axes within bbox (GeoDataFrame in EPSG:3857).
     """
     for _, row in df_pictographs.iterrows():
-        _draw_pictographs(ax, row,size=size)
+        _draw_pictographs(ax, row,size, forbidden)
 
-def _draw_pictographs(ax, row: pd.Series, size: float = 250) -> None:
+def _draw_pictographs(ax, row: pd.Series, size: float = 250, forbidden: ForbiddenCollector | None=None) -> None:
     """Draw a PNG image on the given axis while preserving its aspect ratio."""
     path_name = row["img_path"]
     img = _get_image(path_name)
@@ -38,6 +38,46 @@ def _draw_pictographs(ax, row: pd.Series, size: float = 250) -> None:
     half_height = height_m / 2
 
     extent = [x - half_width, x + half_width, y - half_height, y + half_height]
+
+    if forbidden is not None:
+        x0_data = extent[0]
+        x1_data = extent[1]
+        y0_data = extent[2]
+        y1_data = extent[3]
+
+        x0_disp, y0_disp = ax.transData.transform((x0_data, y0_data))
+        x1_disp, y1_disp = ax.transData.transform((x1_data, y1_data))
+
+        l_full = min(x0_disp, x1_disp)
+        r_full = max(x0_disp, x1_disp)
+        b_full = min(y0_disp, y1_disp)
+        t_full = max(y0_disp, y1_disp)
+
+        width_px = r_full - l_full
+        height_px = t_full - b_full
+
+        if width_px <= 0.0 or height_px <= 0.0:
+            return
+
+        offset_x = width_px * 0.25
+        offset_y = height_px * 0.25
+
+        l_inner = l_full + offset_x
+        r_inner = r_full - offset_x
+        b_inner = b_full + offset_y
+        t_inner = t_full - offset_y
+
+        core_rect = RectPX(
+            l=l_inner,
+            b=b_inner,
+            r=r_inner,
+            t=t_inner,
+        )
+
+        reserved = forbidden.reserve_rect_if_free(core_rect)
+        if not reserved:
+            return
+
     ax.imshow(img, extent=extent, aspect="equal", zorder=10, interpolation="bilinear")
 
 def _get_image(path_name: str):

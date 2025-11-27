@@ -39,10 +39,11 @@ def render_middle_transit_map(stop_row: Series, ctx_map: CityRouteDatabase, laye
     if args.render_routes:
         render_bus_lines_v2(ax, stop_row, ctx_map, forbidden=forbidden)
     if args.render_map:
-        render_labels_for_layers(ax, layers, fitted_bbox, forbidden_px=forbidden.geoms)
+        render_pictographs(ax, pictographs_df, 250, forbidden=forbidden)
+        render_labels_for_layers(ax, layers, fitted_bbox, forbidden=forbidden)
         render_walk_5min_focus_gap(ax, stop_row, color="#d7263d",
                                    dash_on_off=(36.0, 22.0), dash_offset=6.0, gap_width_deg=0, label_text="")
-        render_pictographs(ax, pictographs_df, 250)
+        # forbidden.plot_boxes(ax, edgecolor="cyan", linewidth=1.5, alpha=0.4)
 
     fig.savefig(out_path, pad_inches=0)
     plt.close(fig)
