@@ -10,9 +10,10 @@ from matplotlib.textpath import TextPath
 from matplotlib.transforms import Affine2D
 from matplotlib.path import Path
 from matplotlib.patches import PathPatch, Circle
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 
 from transport_posters.data_transport.сity_route_database import CityRouteDatabase
-from transport_posters.load_configs import FONT_INTER_BOLD
+from transport_posters.load_configs import FONT_INTER_BOLD, IMG_BUS_ICON
 from transport_posters.render_transport.stop_layout_opt import RectPX
 from transport_posters.utils.forbidden import ForbiddenCollector
 
@@ -103,8 +104,36 @@ def _render_stops_numbered(ax, stop_ids: Set[int], stops_gdf: gpd.GeoDataFrame, 
     reps.sort(key=lambda t: t[1])
 
     for n, (pt, _) in enumerate(reps, start=1):
+        # _draw_stop_icon(ax, pt, forbidden=forbidden)
         _draw_stop_circle(ax, pt, forbidden=forbidden)
-        _draw_stop_number(ax, pt, str(n), forbidden=forbidden)
+        _draw_stop_number(ax, pt, str("A"), forbidden=forbidden)
+
+def _draw_stop_icon(ax, pt: Point, type: None | str = None, forbidden: 'ForbiddenCollector|None' = None):
+    if not type or type == "bus":
+        offset_image = OffsetImage(IMG_BUS_ICON, zoom=0.06)
+        annotation = AnnotationBbox(
+            offset_image,
+            (pt.x, pt.y),
+            xycoords="data",
+            frameon=False,
+            pad=0.0,
+            zorder=5.0,
+        )
+        ax.add_artist(annotation)
+
+        if forbidden is not None:
+            ppp = ax.figure.dpi / 72.0
+            pad_px = 1.0 * ppp
+
+            renderer = ax.figure.canvas.get_renderer()
+            if renderer is None:
+                ax.figure.canvas.draw()
+                renderer = ax.figure.canvas.get_renderer()
+
+            win_bb = annotation.get_window_extent(renderer=renderer)
+            rectPx = RectPX(win_bb.x0, win_bb.y0, win_bb.x1, win_bb.y1)
+            forbidden.add_rect(rectPx, buffer_px=pad_px)
+
 
 
 def _draw_stop_circle(ax, pt: Point,

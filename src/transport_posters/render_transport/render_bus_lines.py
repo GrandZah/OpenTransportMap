@@ -11,7 +11,7 @@ import matplotlib.patheffects as pe
 
 from transport_posters.data_transport.сity_route_database import CityRouteDatabase
 from transport_posters.logger import log_function_call
-from transport_posters.render_transport.render_stop_point import render_stop_point
+from transport_posters.render_transport.render_stop_point import render_stop_point, render_stop_point_without_text
 
 
 @dataclass(frozen=True)
@@ -146,3 +146,14 @@ def get_routes_without_last_stop(stop_row: Series, routes_gdf: gpd.GeoDataFrame,
         routes_without_last_stop.append(rid)
 
     return routes_without_last_stop
+
+
+def render_stops_without_text(ax, visited_stops: set, stops_gdf: gpd.GeoDataFrame) -> None:
+    for vis_stop_id in visited_stops:
+        cur_stop_row = stops_gdf[stops_gdf.stop_id == vis_stop_id]
+        if cur_stop_row.empty:
+            continue
+        cur_stop_row = cur_stop_row.iloc[0]
+        cur_stop_pt: Point = cur_stop_row.geometry
+
+        render_stop_point_without_text(ax, cur_stop_pt, "white")

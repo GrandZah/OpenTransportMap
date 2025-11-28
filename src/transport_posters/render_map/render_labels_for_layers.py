@@ -21,7 +21,12 @@ def _require_field(gdf: gpd.GeoDataFrame, field: str, layer_name: str):
         raise KeyError(f"label({layer_name}): omitted field '{field}' in columns {list(gdf.columns)[:20]}")
 
 
-def _validation_data(spec: Optional[LabelSpec], layer: GeoLayer, bbox_gdf: gpd.GeoDataFrame, layer_name: str = "?"):
+def _validation_data(
+        spec: Optional[LabelSpec],
+        layer: GeoLayer,
+        bbox_gdf: gpd.GeoDataFrame,
+        layer_name: str = "?",
+) -> gpd.GeoDataFrame:
     if spec is None:
         raise RuntimeError("spec is None")
 
@@ -29,11 +34,24 @@ def _validation_data(spec: Optional[LabelSpec], layer: GeoLayer, bbox_gdf: gpd.G
     if gdf is None or gdf.empty:
         raise RuntimeError(f"label: gdf empty")
 
-    _require_field(gdf, spec.field, layer_name)
+    field = spec.field
+    _require_field(gdf, field, layer_name)
 
     clipped = gdf.clip(bbox_gdf)
     if clipped.empty:
-        raise RuntimeError(f"label: clipped empty")
+        raise RuntimeError("label: clipped empty")
+
+    if field in clipped.columns:
+        values = clipped[field]
+        mask_not_null = values.notna()
+        mask_not_empty = values.astype(str) != ""
+        clipped = clipped[mask_not_null & mask_not_empty]
+
+    if clipped.empty:
+        raise RuntimeError(
+            f"label({layer_name}): no non-empty values in field '{field}' after clip"
+        )
+
     return clipped
 
 
