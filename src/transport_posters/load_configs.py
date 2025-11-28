@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Union
 
+from matplotlib import image as mpimg
 from pyproj import CRS
 
 
@@ -19,6 +20,7 @@ class ConfigPaths:
     style_assets_fonts_dir: Path
     style_pictographs_dir: Path
     style_pictographs_img_dir: Path
+    style_assets_icons: Path
 
     @classmethod
     def from_base(cls, base: Path) -> "ConfigPaths":
@@ -34,7 +36,8 @@ class ConfigPaths:
             output_composed_img_dir=base / "output" / "composed_img",
             style_assets_fonts_dir=base / "style" / "assets" / "fonts",
             style_pictographs_dir=base / "style" / "pictographs",
-            style_pictographs_img_dir = base / "style" / "pictographs" / "img"
+            style_pictographs_img_dir = base / "style" / "pictographs" / "img",
+            style_assets_icons =  base / "style"/ "assets" / "icons"
         )
 
     def ensure_dirs(self):
@@ -79,3 +82,6 @@ PAPER_SIZES_INCH = {
 }
 
 CRSLike = Union[int, str, dict, CRS]
+
+BUS_ICON_PATH = CONFIG_PATHS.style_assets_icons / "bus.png"
+IMG_BUS_ICON = mpimg.imread(BUS_ICON_PATH)

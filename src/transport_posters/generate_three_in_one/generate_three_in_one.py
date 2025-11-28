@@ -1,5 +1,8 @@
 import logging
 import os
+import re
+from pathlib import Path
+
 import geopandas as gpd
 import shapely
 
@@ -52,6 +55,18 @@ def generate_three_in_one(args):
     ctx_map = ctx_map.reproject_all(local_projection)
 
     stops_gdf = ctx_map.stops_gdf
+
+    if args.skip:
+        existing_stop_ids = _get_existing_stop_ids_from_dir(save_dir)
+        if existing_stop_ids:
+            initial_count = len(stops_gdf)
+            stops_gdf = stops_gdf[~stops_gdf["stop_id"].astype(str).isin(existing_stop_ids)]
+            skipped = initial_count - len(stops_gdf)
+            logger.info(f"Skipping {skipped} stops with already rendered images.")
+        else:
+            logger.info("No existing images found to skip in %s.", save_dir)
+
+
     stops_gdf = _choose_stops(stops_gdf, city_bbox_gdf_data.to_crs(local_projection))
     stops_gdf_iterate = stops_gdf.head(args.limit) if args.limit else stops_gdf
     logger.info("Rendering %d stops …", len(stops_gdf_iterate))
@@ -135,3 +150,42 @@ def _choose_stops(stops_gdf: gpd.GeoDataFrame, bbox_gdf: gpd.GeoDataFrame):
     # inside = gpd.clip(stops_gdf, bbox_gdf)
     # stops_gdf = inside[inside['routes'].apply(len) > 4]
     return stops_gdf
+
+def _get_existing_stop_ids_from_dir(
+    save_dir: Path,
+):
+    """
+    Collect stop IDs for which there are already PNG images in save_dir.
+
+    Expected filename patterns:
+      - transit_map_{stop_id}_{slug}.png
+      - detailed_map_{stop_id}_{slug}.png
+      - far_plan_{stop_id}_{slug}.png
+      - poster_{stop_id}_{slug}.png
+    """
+    if not save_dir.exists():
+        return set()
+
+    pattern = re.compile(
+        r"^(?:transit_map|detailed_map|far_plan|poster)_(\d+)_.*$",
+    )
+    existing_ids = set()
+
+    for path in save_dir.iterdir():
+        if not path.is_file():
+            continue
+        if path.suffix.lower() != ".png":
+            continue
+
+        match = pattern.match(
+            path.stem,
+        )
+        if match:
+            stop_id_str = match.group(
+                1,
+            )
+            existing_ids.add(
+                stop_id_str,
+            )
+
+    return existing_ids
