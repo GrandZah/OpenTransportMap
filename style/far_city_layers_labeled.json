@@ -48,14 +48,15 @@
       "gtype": "polygon",
       "zorder": 1.5,
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "centroid",
-        "size_pt": 9,
+        "size_pt": 10,
         "color": "#2d5f8a",
         "halo_color": "#ffffff",
         "halo_width": 2.2,
         "italic": true,
-        "alpha": 0.9,
+        "alpha": 0.8,
         "zorder": 3.2
       }
     },
@@ -67,14 +68,15 @@
       "gtype": "polygon",
       "zorder": 1,
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "centroid",
-        "size_pt": 9,
+        "size_pt": 10,
         "color": "#2d5f8a",
         "halo_color": "#ffffff",
         "halo_width": 2.0,
         "italic": true,
-        "alpha": 0.9,
+        "alpha": 0.8,
         "zorder": 3.2
       }
     },
@@ -89,7 +91,7 @@
       "label": {
         "field": "name",
         "placement": "line",
-        "size_pt": 9,
+        "size_pt": 10,
         "color": "#2d5f8a",
         "halo_color": "#ffffff",
         "halo_width": 2.2,
@@ -98,7 +100,7 @@
         "repeat_m": 3000,
         "straight_tol_m": 6.0,
         "italic": true,
-        "alpha": 0.9,
+        "alpha": 0.8,
         "zorder": 3.3
       }
     },
@@ -178,14 +180,15 @@
       "gtype": "point",
       "zorder": 2.5,
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "point",
         "size_pt": 12,
         "color": "#3a4b58",
         "halo_color": "#ffffff",
-        "halo_width": 2.2,
+        "halo_width": 2.4,
         "weight": "bold",
-        "alpha": 0.95,
+        "alpha": 0.6,
         "zorder": 3.4,
         "align": "center"
       }
@@ -196,7 +199,20 @@
       },
       "color": "#f9f9f9",
       "gtype": "point",
-      "zorder": 2.5
+      "zorder": 2.5,
+      "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
+        "field": "name",
+        "placement": "point",
+        "size_pt": 12,
+        "color": "#3a4b58",
+        "halo_color": "#ffffff",
+        "halo_width": 2.4,
+        "weight": "bold",
+        "alpha": 0.6,
+        "zorder": 3.4,
+        "align": "center"
+      }
     }
   },
   "by_area_id": {

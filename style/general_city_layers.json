@@ -15,13 +15,14 @@
         "alpha": 0.85
       },
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "centroid",
-        "size_pt": 10,
+        "size_pt": 12,
         "color": "#2f4a2f",
         "halo_color": "#ffffff",
         "halo_width": 2.0,
-        "alpha": 0.95,
+        "alpha": 0.8,
         "zorder": 3.2
       }
     },
@@ -40,13 +41,14 @@
         "alpha": 0.85
       },
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "centroid",
-        "size_pt": 10,
+        "size_pt": 12,
         "color": "#2f4a2f",
         "halo_color": "#ffffff",
         "halo_width": 2.0,
-        "alpha": 0.95,
+        "alpha": 0.8,
         "zorder": 3.2
       }
     },
@@ -80,6 +82,7 @@
         "alpha": 0.85
       },
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "centroid",
         "size_pt": 9.5,
@@ -106,13 +109,14 @@
         "alpha": 0.85
       },
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "centroid",
-        "size_pt": 9,
+        "size_pt": 12,
         "color": "#2f4a2f",
         "halo_color": "#ffffff",
         "halo_width": 2.0,
-        "alpha": 0.9,
+        "alpha": 0.8,
         "zorder": 3.2
       }
     },
@@ -131,6 +135,7 @@
         "alpha": 1
       },
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "centroid",
         "size_pt": 10,
@@ -157,6 +162,7 @@
         "alpha": 1
       },
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "centroid",
         "size_pt": 20,
@@ -183,14 +189,15 @@
         "alpha": 0.85
       },
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "centroid",
-        "size_pt": 9.5,
+        "size_pt": 12,
         "color": "#2d5f8a",
         "halo_color": "#ffffff",
         "halo_width": 2.0,
         "italic": true,
-        "alpha": 0.95,
+        "alpha": 0.8,
         "zorder": 3.2
       }
     },
@@ -203,9 +210,10 @@
       "zorder": 1.4,
       "width": 10,
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "line",
-        "size_pt": 10,
+        "size_pt": 12,
         "color": "#2d5f8a",
         "halo_color": "#ffffff",
         "halo_width": 2.2,
@@ -214,7 +222,7 @@
         "repeat_m": 2000,
         "straight_tol_m": 6.0,
         "italic": true,
-        "alpha": 0.95,
+        "alpha": 0.7,
         "zorder": 3.3
       }
     },
@@ -238,7 +246,7 @@
       "label": {
         "field": "name",
         "placement": "line",
-        "size_pt": 10,
+        "size_pt": 11,
         "color": "#3a4b58",
         "fontproperties": "assets/fonts/Inter-Bold.otf",
         "halo_color": "#ffffff",
@@ -257,21 +265,7 @@
       "color": "#B0B0B0",
       "gtype": "line",
       "zorder": 1.9,
-      "width": 3,
-      "label": {
-        "field": "name",
-        "placement": "line",
-        "size_pt": 9.5,
-        "color": "#4a4a4a",
-        "halo_color": "#ffffff",
-        "halo_width": 1.8,
-        "min_len_m": 120,
-        "align": "center",
-        "repeat_m": 1800,
-        "straight_tol_m": 6.0,
-        "alpha": 0.95,
-        "zorder": 3.2
-      }
+      "width": 3
     },
     "city_districts": {
       "tags": {
@@ -327,13 +321,14 @@
         "alpha": 0.85
       },
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "centroid",
-        "size_pt": 10.5,
+        "size_pt": 12.5,
         "color": "#3a4b58",
         "halo_color": "#ffffff",
         "halo_width": 2.0,
-        "alpha": 0.95,
+        "alpha": 0.7,
         "zorder": 3.2
       }
     },
@@ -352,6 +347,7 @@
         "alpha": 0.85
       },
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "centroid",
         "size_pt": 12,
@@ -371,14 +367,15 @@
       "gtype": "point",
       "zorder": 2.5,
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "point",
-        "size_pt": 13,
+        "size_pt": 15,
         "color": "#3a4b58",
         "halo_color": "#ffffff",
         "halo_width": 2.4,
         "weight": "bold",
-        "alpha": 0.97,
+        "alpha": 0.5,
         "zorder": 3.4,
         "align": "center"
       }
@@ -391,14 +388,15 @@
       "gtype": "point",
       "zorder": 2.5,
       "label": {
+        "fontproperties": "assets/fonts/Inter-Bold.otf",
         "field": "name",
         "placement": "point",
-        "size_pt": 13,
+        "size_pt": 16,
         "color": "#3a4b58",
         "halo_color": "#ffffff",
         "halo_width": 2.4,
         "weight": "bold",
-        "alpha": 0.97,
+        "alpha": 0.5,
         "zorder": 3.4,
         "align": "center"
       }

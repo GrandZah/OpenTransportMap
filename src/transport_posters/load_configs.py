@@ -68,6 +68,7 @@ CONFIG_RENDER = load_config_render()
 CONFIG_PATHS = load_config_paths()
 
 FONT_INTER_BOLD = CONFIG_PATHS.style_assets_fonts_dir / "Inter-Bold.otf"
+FONT_GOLOS_BOLD = CONFIG_PATHS.style_assets_fonts_dir / "Golos-Text_Bold.ttf"
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 
 PAPER_SIZES_INCH = {
