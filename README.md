@@ -5,13 +5,13 @@
 ## Примеры изображений
 
 **Подробная схематика**  
-![Detail schematic](docs/images/map_with_pictographs2.png)
+![Detail schematic](docs/images/map_with_pictographs3.png)
 
-**Как может выглядеть в реальном мире**
+**Плакат под формат А4**
 <details>
   <summary>Посмотреть изображение</summary>
   
-  ![Overview map](docs/images/overview_map.png)
+  ![Overview map](docs/images/a4_format_map.png)
 </details>
 
 ## Быстрый старт
