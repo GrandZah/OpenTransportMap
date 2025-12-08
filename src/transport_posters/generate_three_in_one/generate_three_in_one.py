@@ -109,8 +109,7 @@ def generate_three_in_one(args):
         else:
             detailed_layers = None
 
-        _prepare_for_detailed_map_and_render(args, stop_row, ctx_map, detailed_layers, local_projection,
-                                             detailed_out_path)
+        _prepare_for_detailed_map_and_render(args, stop_row, ctx_map, detailed_layers,detailed_out_path, stop_bbox_gdf)
 
         compose_img_to_poster(transit_out_path, detailed_out_path, far_plan_out_path, poster_out_path)
 
@@ -125,8 +124,7 @@ def _prepare_for_transit_map_and_render(args, stop_row, ctx_map, layers, local_p
                               figsize_poster=figsize)
 
 
-def _prepare_for_detailed_map_and_render(args, stop_row, ctx_map, layers, local_projection, detailed_map_out_path):
-    stop_bbox_gdf = get_stop_bbox_gdf(stop_row, local_projection, LOCAL_MAP_RADIUS)
+def _prepare_for_detailed_map_and_render(args, stop_row, ctx_map, layers, detailed_map_out_path, stop_bbox_gdf):
     figsize = [10, 10]
     render_detailed_map(stop_row, ctx_map, layers, stop_bbox_gdf, args, detailed_map_out_path, figsize_poster=figsize)
 
