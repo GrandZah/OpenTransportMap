@@ -15,6 +15,7 @@ from transport_posters.render_map.utils_text_label import (
     _draw_label,
     _footprint_fits,
 )
+from transport_posters.utils.forbidden import ForbiddenCollector
 
 logger = logging.getLogger(__name__)
 
@@ -127,18 +128,8 @@ def _text_block_size_m(ax: plt.Axes, lines: List[str], size_pt: float, ppm: floa
     return w_m, h_m
 
 
-def _place_centroid_like(
-        ax: plt.Axes,
-        gdf: gpd.GeoDataFrame,
-        spec: LabelSpec,
-        field: str,
-        stats: dict,
-        bbox_geom,
-        ppm,
-        *,
-        collider: _LabelCollider,
-        get_anchor
-):
+def _place_centroid_like(ax: plt.Axes, gdf: gpd.GeoDataFrame, spec: LabelSpec, field: str,
+                         stats: dict, bbox_geom, ppm, *, forbidden: ForbiddenCollector, get_anchor):
     """
     General logic for placing point/centroid labels:
     - take the anchor (point);
@@ -165,7 +156,8 @@ def _place_centroid_like(
             stats["attempted"] += 1
             continue
 
-        lines = _wrap_text_compact(ax, text, spec.size_pt, ppm, max_width_m=wrap_width_m, max_lines=max_lines)
+        lines = _wrap_text_compact(ax, text, spec.size_pt, ppm,
+                                   max_width_m=wrap_width_m, max_lines=max_lines)
         if not lines:
             stats["empty_text"] += 1
             stats["attempted"] += 1
@@ -173,14 +165,17 @@ def _place_centroid_like(
 
         w_m, h_m = _text_block_size_m(ax, lines, spec.size_pt, ppm, line_spacing=line_spacing)
 
-        fp = _text_footprint(p.x, p.y, w_m, h_m, angle_deg=0.0, align=getattr(spec, "align", "center"))
+        fp = _text_footprint(p.x, p.y, w_m, h_m, angle_deg=0.0,
+                             align=getattr(spec, "align", "center"))
         if not _footprint_fits(bbox_geom, fp, margin_m):
             stats["bbox_cross"] = stats.get("bbox_cross", 0) + 1
             stats["attempted"] += 1
             continue
 
-        fp_px = _text_footprint_px(ax, p.x, p.y, w_m, h_m, 0.0, getattr(spec, "align", "center"), ppm)
-        if collider.conflicts(fp_px):
+        fp_px = _text_footprint_px(ax, p.x, p.y, w_m, h_m, 0.0,
+                                   getattr(spec, "align", "center"), ppm)
+
+        if not forbidden.is_free_geom(fp_px):
             stats["overlap_skip"] = stats.get("overlap_skip", 0) + 1
             stats["attempted"] += 1
             continue
@@ -191,26 +186,28 @@ def _place_centroid_like(
                 txt.set_linespacing(line_spacing)
             except Exception:
                 pass
-            collider.add(fp_px)
+            forbidden.add_poly(fp_px)
             stats["placed"] += 1
         stats["attempted"] += 1
 
 
 def label_points(ax: plt.Axes, gdf: gpd.GeoDataFrame, spec: LabelSpec, field: str,
-                 stats: dict, bbox_geom, ppm, *, collider: _LabelCollider):
+                 stats: dict, bbox_geom, ppm, *, forbidden: ForbiddenCollector):
     """Public version: signatures for points. General logic + anchor = point itself or representative_point()."""
 
     def _anchor(geom):
         return geom if isinstance(geom, Point) else geom.representative_point()
 
-    _place_centroid_like(ax, gdf, spec, field, stats, bbox_geom, ppm, collider=collider, get_anchor=_anchor)
+    _place_centroid_like(ax, gdf, spec, field, stats, bbox_geom, ppm,
+                         forbidden=forbidden, get_anchor=_anchor)
 
 
 def label_polygons(ax: plt.Axes, gdf: gpd.GeoDataFrame, spec: LabelSpec, field: str,
-                   stats: dict, bbox_geom, ppm, *, collider: _LabelCollider):
+                   stats: dict, bbox_geom, ppm, *, forbidden: ForbiddenCollector):
     """Public version: polygon signatures (by centroid/representative point)."""
 
     def _anchor(geom):
         return geom.representative_point()
 
-    _place_centroid_like(ax, gdf, spec, field, stats, bbox_geom, ppm, collider=collider, get_anchor=_anchor)
+    _place_centroid_like(ax, gdf, spec, field, stats, bbox_geom, ppm,
+                         forbidden=forbidden, get_anchor=_anchor)

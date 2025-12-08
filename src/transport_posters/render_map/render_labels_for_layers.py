@@ -11,6 +11,7 @@ from transport_posters.render_map.render_labels_lines import label_lines
 from transport_posters.render_map.render_labels_points_polygons import label_points, label_polygons
 from transport_posters.render_map.utils_text_label import _LabelCollider
 from transport_posters.utils.utils_rendering import points_per_meter
+from transport_posters.utils.forbidden import ForbiddenCollector
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,12 @@ def _require_field(gdf: gpd.GeoDataFrame, field: str, layer_name: str):
         raise KeyError(f"label({layer_name}): omitted field '{field}' in columns {list(gdf.columns)[:20]}")
 
 
-def _validation_data(spec: Optional[LabelSpec], layer: GeoLayer, bbox_gdf: gpd.GeoDataFrame, layer_name: str = "?"):
+def _validation_data(
+        spec: Optional[LabelSpec],
+        layer: GeoLayer,
+        bbox_gdf: gpd.GeoDataFrame,
+        layer_name: str = "?",
+) -> gpd.GeoDataFrame:
     if spec is None:
         raise RuntimeError("spec is None")
 
@@ -28,16 +34,29 @@ def _validation_data(spec: Optional[LabelSpec], layer: GeoLayer, bbox_gdf: gpd.G
     if gdf is None or gdf.empty:
         raise RuntimeError(f"label: gdf empty")
 
-    _require_field(gdf, spec.field, layer_name)
+    field = spec.field
+    _require_field(gdf, field, layer_name)
 
     clipped = gdf.clip(bbox_gdf)
     if clipped.empty:
-        raise RuntimeError(f"label: clipped empty")
+        raise RuntimeError("label: clipped empty")
+
+    if field in clipped.columns:
+        values = clipped[field]
+        mask_not_null = values.notna()
+        mask_not_empty = values.astype(str) != ""
+        clipped = clipped[mask_not_null & mask_not_empty]
+
+    if clipped.empty:
+        raise RuntimeError(
+            f"label({layer_name}): no non-empty values in field '{field}' after clip"
+        )
+
     return clipped
 
 
 def _render_labels_for_layer(ax: plt.Axes, layer: GeoLayer, bbox_gdf: gpd.GeoDataFrame,
-                             layer_name: str = "?", *, ppm: float, collider: _LabelCollider):
+                             layer_name: str = "?", *, ppm: float, forbidden: ForbiddenCollector):
     spec: Optional[LabelSpec] = getattr(layer, "label", None)
     try:
         clipped = _validation_data(spec, layer, bbox_gdf, layer_name)
@@ -60,11 +79,11 @@ def _render_labels_for_layer(ax: plt.Axes, layer: GeoLayer, bbox_gdf: gpd.GeoDat
 
     match placement:
         case "line":
-            label_lines(ax, clipped, spec, spec.field, stats, bbox_geom, ppm=ppm, collider=collider)
+            label_lines(ax, clipped, spec, spec.field, stats, bbox_geom, ppm=ppm, forbidden=forbidden)
         case "point":
-            label_points(ax, clipped, spec, spec.field, stats, bbox_geom, ppm=ppm, collider=collider)
+            label_points(ax, clipped, spec, spec.field, stats, bbox_geom, ppm=ppm, forbidden=forbidden)
         case "centroid" | "polygon":
-            label_polygons(ax, clipped, spec, spec.field, stats, bbox_geom, ppm=ppm, collider=collider)
+            label_polygons(ax, clipped, spec, spec.field, stats, bbox_geom, ppm=ppm, forbidden=forbidden)
         case _:
             logger.warning("unknown placement %s", placement)
             return
@@ -74,17 +93,12 @@ def _render_labels_for_layer(ax: plt.Axes, layer: GeoLayer, bbox_gdf: gpd.GeoDat
 
 @log_function_call
 def render_labels_for_layers(ax: plt.Axes, layers: LayersMap, bbox_gdf: gpd.GeoDataFrame,
-                             forbidden_px: list | None = None):
+                             forbidden: ForbiddenCollector | None = None):
     """Render text labels for map layers within the specified bounding box."""
     ppm = points_per_meter(ax)
-    collider = _LabelCollider()
-
-    if forbidden_px:
-        for poly_px in forbidden_px:
-            collider.add(poly_px)
 
     items = [(name, layer) for name, layer in layers.items() if getattr(layer, "label", None)]
     items.sort(key=lambda kv: getattr(kv[1].label, "zorder", 0), reverse=True)
 
     for name, layer in items:
-        _render_labels_for_layer(ax, layer, bbox_gdf, layer_name=name, ppm=ppm, collider=collider)
+        _render_labels_for_layer(ax, layer, bbox_gdf, layer_name=name, ppm=ppm, forbidden=forbidden)

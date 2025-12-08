@@ -122,34 +122,30 @@ def _draw_pattern_image_for_layer(
 
     (x0p, y0p) = ax.transData.transform((minx, miny))
     (x1p, y1p) = ax.transData.transform((maxx, maxy))
-    W_disp = int(max(2, abs(x1p - x0p) * oversample))
-    H_disp = int(max(2, abs(y1p - y0p) * oversample))
+    W_disp = int(max(2, abs(x1p - x0p)))
+    H_disp = int(max(2, abs(y1p - y0p)))
 
-    width_m = maxx - minx
-    height_m = maxy - miny
-    out_W = int(max(2, min(max_dim, max(W_disp, width_m * px_per_meter))))
-    out_H = int(max(2, min(max_dim, max(H_disp, height_m * px_per_meter))))
+    scale = float(px_per_meter)
+    out_W = int(min(max_dim, W_disp * scale))
+    out_H = int(min(max_dim, H_disp * scale))
 
     if out_W * out_H > max_pixels:
-        scale = (max_pixels / (out_W * out_H)) ** 0.5
-        out_W = max(2, int(out_W * scale))
-        out_H = max(2, int(out_H * scale))
+        k = (max_pixels / (out_W * out_H)) ** 0.5
+        out_W = max(2, int(out_W * k))
+        out_H = max(2, int(out_H * k))
 
     base_img = _load_rgba_image(image_path)
     if angle:
-        base_img = base_img.rotate(float(angle), expand=True, resample=Image.Resampling.BICUBIC)
+        base_img = base_img.rotate(float(angle), expand=True, resample=Image.Resampling.NEAREST)
 
-    tile_w_px, tile_h_px = base_img.width, base_img.height
-    tile_w_px = min(tile_w_px, out_W)
-    tile_h_px = min(tile_h_px, out_H)
+    tile_w_px, tile_h_px = base_img.size
     if tile_w_px < 1 or tile_h_px < 1:
         return
 
-    if (base_img.width, base_img.height) != (tile_w_px, tile_h_px):
-        base_img = base_img.resize((tile_w_px, tile_h_px), resample=Image.Resampling.BICUBIC)
     tile_arr = np.asarray(base_img)
-    ny = (out_H + tile_arr.shape[0] - 1) // tile_arr.shape[0]
-    nx = (out_W + tile_arr.shape[1] - 1) // tile_arr.shape[1]
+
+    ny = (out_H + tile_h_px - 1) // tile_h_px
+    nx = (out_W + tile_w_px - 1) // tile_w_px
     big = np.tile(tile_arr, (ny, nx, 1))[:out_H, :out_W, :]
 
     im = ax.imshow(

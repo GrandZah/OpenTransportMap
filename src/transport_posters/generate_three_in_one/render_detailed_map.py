@@ -13,18 +13,9 @@ from transport_posters.render_map.render_walk_access import render_walk_5min_foc
 from transport_posters.render_transport.render_bus_lines_v2 import render_bus_lines_v2
 from transport_posters.render_transport.render_stops import render_stops
 from transport_posters.utils.forbidden import ForbiddenCollector
-from transport_posters.utils.utils_rendering import fit_bbox_to_aspect
+from transport_posters.utils.utils_rendering import fit_bbox_to_aspect, settings_ax
 
 logger = logging.getLogger(__name__)
-
-
-def _settings_ax(ax, bbox_gdf):
-    minx, miny, maxx, maxy = bbox_gdf.total_bounds
-    ax.set_aspect('equal', adjustable='datalim')
-    ax.set_xlim(minx, maxx)
-    ax.set_ylim(miny, maxy)
-    ax.set_axis_off()
-    ax.margins(0)
 
 
 @log_function_call
@@ -39,7 +30,7 @@ def render_detailed_map(stop_row: Series, ctx_map: CityRouteDatabase, layers: La
     fitted_bbox = fit_bbox_to_aspect(bbox_gdf, aspect=target_aspect, bleed=bleed)
     fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
     fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
-    _settings_ax(ax, fitted_bbox)
+    settings_ax(ax, fitted_bbox)
 
     forbidden = ForbiddenCollector()
 
@@ -48,9 +39,9 @@ def render_detailed_map(stop_row: Series, ctx_map: CityRouteDatabase, layers: La
     if args.render_routes:
         render_stops(ax, stop_row, ctx_map, fitted_bbox, forbidden=forbidden)
     if args.render_map:
-        render_labels_for_layers(ax, layers, fitted_bbox, forbidden_px=forbidden.geoms)
+        render_labels_for_layers(ax, layers, fitted_bbox, forbidden=forbidden)
         render_walk_5min_focus_gap(ax, stop_row, color="#d7263d",
-                                   dash_on_off=(36.0, 22.0), dash_offset=6.0)
+                                   dash_on_off=(36.0, 22.0), dash_offset=6.0, label_text="~5 минут")
     fig.savefig(out_path, pad_inches=0)
     plt.close(fig)
     logger.info("Saved %s", out_path)

@@ -20,7 +20,7 @@ def main():
     parser.add_argument("--gallery", action="store_true", help="Generate and open an HTML gallery of all rendered SVGs")
     args = parser.parse_args()
 
-    generate_maps(args)
+    # generate_maps(args)
     generate_three_in_one(args)
 
 

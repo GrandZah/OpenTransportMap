@@ -5,13 +5,13 @@
 ## Примеры изображений
 
 **Подробная схематика**  
-![Detail schematic](docs/images/detail_schematic.png)
+![Detail schematic](docs/images/map_with_pictographs3.png)
 
-**Как может выглядеть в реальном мире**
+**Плакат под формат А4**
 <details>
   <summary>Посмотреть изображение</summary>
   
-  ![Overview map](docs/images/overview_map.png)
+  ![Overview map](docs/images/a4_format_map.png)
 </details>
 
 ## Быстрый старт
@@ -139,6 +139,12 @@ poetry run transport-posters --limit 1 --render-map --render-routes --area-id 16
 ```
 
 Через несколько минут в `output/` появятся результаты (см. раздел ниже).
+
+Чтобы посмотреть предварительно, то можно не генерировать карту. (Пару десятков секунд)
+
+```bash
+poetry run transport-posters --limit 1 --render-routes --area-id 1614795
+```
 
 </details>
 

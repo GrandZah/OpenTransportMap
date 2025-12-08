@@ -69,6 +69,7 @@ def render_stop_point(ax, cur_stop_pt, platform_pt,
                 fontsize=config_render_stop.FONT_SIZE_LABEL, fontproperties=custom_font,
                 ha=ha, va=va, zorder=6, clip_on=True)
 
+    # Wrong
     bus_nums = [id2ref.get(rid, str(rid)) for rid in set(stop_route_ids) & set(cur_stop_route_ids)]
     if not bus_nums:
         return
@@ -80,3 +81,12 @@ def render_stop_point(ax, cur_stop_pt, platform_pt,
     ax.annotate(sorted_bus, xy=(x0, y0), xytext=(ox_bus, -down), textcoords="offset points",
                 fontsize=config_render_stop.FONT_SIZE_BUS, fontproperties=custom_font,
                 ha=ha, va="top", zorder=6, bbox=bbox_kw, clip_on=True)
+
+
+def render_stop_point_without_text(ax, cur_stop_pt,
+                      cur_stop_colour: str = "white") -> None:
+    """Render a single stop with its label and route numbers."""
+    x0, y0 = cur_stop_pt.x, cur_stop_pt.y
+
+    ax.scatter(x0, y0, s=config_render_stop.STOP_SIZE,
+               facecolor=cur_stop_colour, edgecolor=config_render_stop.STOP_COLOR, zorder=5)

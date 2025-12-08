@@ -1,5 +1,9 @@
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Union
+
+from matplotlib import image as mpimg
+from pyproj import CRS
 
 
 @dataclass
@@ -14,6 +18,9 @@ class ConfigPaths:
     output_maps_dir: Path
     output_composed_img_dir: Path
     style_assets_fonts_dir: Path
+    style_pictographs_dir: Path
+    style_pictographs_img_dir: Path
+    style_assets_icons: Path
 
     @classmethod
     def from_base(cls, base: Path) -> "ConfigPaths":
@@ -27,7 +34,10 @@ class ConfigPaths:
             output_logs_dir=base / "output" / "logs",
             output_maps_dir=base / "output" / "maps",
             output_composed_img_dir=base / "output" / "composed_img",
-            style_assets_fonts_dir=base / "style" / "assets" / "fonts"
+            style_assets_fonts_dir=base / "style" / "assets" / "fonts",
+            style_pictographs_dir=base / "style" / "pictographs",
+            style_pictographs_img_dir = base / "style" / "pictographs" / "img",
+            style_assets_icons =  base / "style"/ "assets" / "icons"
         )
 
     def ensure_dirs(self):
@@ -49,7 +59,9 @@ def load_config_render() -> dict:
         "figsize": (20, 20),
         "general_layers_name": "general_city_layers",
         "far_layers_name": "far_city_layers_labeled",
-        "detailed_layers_name": "detailed_city_layers_v2"
+        "detailed_layers_name": "detailed_city_layers_v2",
+        "pictographs_csv": "vologda_pictographs.csv",
+        "detailed_layers_name_v_all": "detailed_city_layers_v_all",
     }
 
 
@@ -57,6 +69,7 @@ CONFIG_RENDER = load_config_render()
 CONFIG_PATHS = load_config_paths()
 
 FONT_INTER_BOLD = CONFIG_PATHS.style_assets_fonts_dir / "Inter-Bold.otf"
+FONT_GOLOS_BOLD = CONFIG_PATHS.style_assets_fonts_dir / "Golos-Text_Bold.ttf"
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 
 PAPER_SIZES_INCH = {
@@ -69,3 +82,8 @@ PAPER_SIZES_INCH = {
     "Letter": (8.5, 11),
     "Legal": (8.5, 14),
 }
+
+CRSLike = Union[int, str, dict, CRS]
+
+BUS_ICON_PATH = CONFIG_PATHS.style_assets_icons / "bus.png"
+IMG_BUS_ICON = mpimg.imread(BUS_ICON_PATH)

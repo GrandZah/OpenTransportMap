@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import List, Dict, Tuple, Set, Iterable
 import numpy as np
 import pandas as pd
-from shapely.geometry import LineString, Point, box
+from shapely.geometry import LineString, Point
 from matplotlib.collections import LineCollection
 import matplotlib.patheffects as pe
 import geopandas as gpd
@@ -34,11 +34,11 @@ RENDER_BUS_LINES_STYLE = RenderStyle()
 
 
 def _get_routes_without_last_stop(stop_row: pd.Series,
-                                  routes_gdf: gpd.GeoDataFrame,
+                                  routes_map: Dict[int, gpd.GeoDataFrame],
                                   route_ids: List[int]) -> List[int]:
     routes_without_last_stop = []
     for rid in route_ids:
-        route_sel = routes_gdf[routes_gdf.route_id == rid]
+        route_sel = routes_map.get(rid)
         if route_sel.empty:
             logger.warning("Route %s not found in routes_gdf", rid)
             continue
@@ -97,7 +97,7 @@ def _get_last_stops_for_routes_in_bbox(
     minx, miny, maxx, maxy = map(float, bbox_gdf.total_bounds)
     # bbox_geom = box(minx, miny, maxx, maxy)
 
-    stops_idx = ctx_map.stops_gdf.set_index("stop_id")["geometry"]
+    stops_index = ctx_map.stops_index
 
     for rid in route_ids:
         edges = ctx_map.edges_map.get(rid)
@@ -124,10 +124,10 @@ def _get_last_stops_for_routes_in_bbox(
         for sid in reversed(route_stop_seq):
             if sid in ex:
                 continue
-
-            if sid not in stops_idx.index:
+            try:
+                pt = stops_index.loc[sid].geometry
+            except KeyError:
                 continue
-            pt = stops_idx.loc[sid]
             if pt is None:
                 continue
             # inside = bbox_geom.intersects(pt) if use_intersects else pt.within(bbox_geom)
@@ -142,13 +142,14 @@ def _get_last_stops_for_routes_in_bbox(
     return result
 
 
-def _get_geometry_routes(ctx_map: CityRouteDatabase,
-                         route_ids: List[int],
-                         stop_id: int) -> Tuple[List[gpd.GeoSeries], Set[int]]:
+def _get_geometry_routes(ctx_map: CityRouteDatabase, route_ids: List[int], stop_id: int)\
+        -> Tuple[List[gpd.GeoSeries], Set[int], Dict[int, Set[int]]]:
+    """ Getting only next station down to route from station with this stop_id """
     routes_map = ctx_map.routes_map
     edges_map = ctx_map.edges_map
     visited_stops: Set[int] = set()
     all_geometry = []
+    routes_visited_stops: Dict[int, Set[int]] = dict()
 
     for rid in route_ids:
         route_sel = routes_map.get(rid)
@@ -162,7 +163,9 @@ def _get_geometry_routes(ctx_map: CityRouteDatabase,
             continue
 
         idx = stop_seq.index(stop_id)
-        visited_stops.update(stop_seq[idx + 1:])
+        next_stops = stop_seq[idx + 1:]
+        visited_stops.update(next_stops)
+        routes_visited_stops[rid] = set(next_stops)
 
         edges_route = edges_map.get(rid)
         if edges_route.empty:
@@ -178,18 +181,33 @@ def _get_geometry_routes(ctx_map: CityRouteDatabase,
         onward = edges_route[edges_route.edge_idx >= start_idx].sort_values("edge_idx")
         all_geometry.append(onward)
 
-    return all_geometry, visited_stops
+    return all_geometry, visited_stops, routes_visited_stops
 
 
 def _draw_routes(ax, all_geometry: List[gpd.GeoSeries]) -> None:
-    lines = []
+    if not all_geometry:
+        return
+
+    x_min, x_max = ax.get_xlim()
+    y_min, y_max = ax.get_ylim()
+
+    def _intersects_axis_bbox(geom: LineString) -> bool:
+        minx, miny, maxx, maxy = geom.bounds
+        if maxx < x_min or minx > x_max:
+            return False
+        if maxy < y_min or miny > y_max:
+            return False
+        return True
+
+    lines: List[LineString] = []
     for onward in all_geometry:
         geoms = getattr(onward, "geometry", onward)
         for geom in geoms:
             if isinstance(geom, LineString):
-                lines.append(geom)
+                if _intersects_axis_bbox(geom):
+                    lines.append(geom)
             else:
-                logger.warning("Route has a non-LineString part")
+                logger.warning("Route has a non-LineString part: %r", type(geom))
     if not lines:
         return
 
@@ -225,10 +243,10 @@ def render_bus_lines_v2(ax,
         return
     platform_pt: Point = platform_row.iloc[0].geometry
 
-    route_ids = _get_routes_without_last_stop(stop_row, ctx_map.routes_gdf, stop_row.routes)
+    route_ids = _get_routes_without_last_stop(stop_row, ctx_map.routes_map, stop_row.routes)
     logger.debug("Stop %s serves routes: %s", stop_id, route_ids)
 
-    all_geometry, visited_stops = _get_geometry_routes(ctx_map, route_ids, stop_id)
+    all_geometry, visited_stops, routes_visited_stops = _get_geometry_routes(ctx_map, route_ids, stop_id)
     _draw_routes(ax, all_geometry)
 
     inputs: List[StopLabelInput] = []
@@ -246,10 +264,10 @@ def render_bus_lines_v2(ax,
     ))
 
     for vis_stop_id in visited_stops:
-        cur_stop_row = ctx_map.stops_gdf[ctx_map.stops_gdf.stop_id == vis_stop_id]
-        if cur_stop_row.empty:
+        try:
+            cur_stop_row = ctx_map.stops_index.loc[vis_stop_id]
+        except KeyError:
             continue
-        cur_stop_row = cur_stop_row.iloc[0]
         cur_stop_pt: Point = cur_stop_row.geometry
 
         platform_row2 = platforms_map.get(vis_stop_id)
@@ -259,10 +277,14 @@ def render_bus_lines_v2(ax,
         platform_pt2: Point = platform_row2.iloc[0].geometry
 
         cur_route_ids = cur_stop_row.routes
-        visible_rids = list(set(route_ids) & set(cur_route_ids))
+
+
+        visible_rids = []
+        for rid in set(route_ids) & set(cur_route_ids):
+            if rid in routes_visited_stops and vis_stop_id in routes_visited_stops[rid]:
+                visible_rids.append(rid)
         if not visible_rids:
             continue
-
         bus_nums = [id2ref.get(rid, str(rid)) for rid in visible_rids]
 
         inputs.append(StopLabelInput(
@@ -310,10 +332,10 @@ def render_bus_lines_v2_only_last(ax,
         return
     platform_pt: Point = platform_row.iloc[0].geometry
 
-    route_ids = _get_routes_without_last_stop(stop_row, ctx_map.routes_gdf, stop_row.routes)
+    route_ids = _get_routes_without_last_stop(stop_row, ctx_map.routes_map, stop_row.routes)
     logger.debug("Stop %s serves routes: %s", stop_id, route_ids)
 
-    all_geometry, visited_stops = _get_geometry_routes(ctx_map, route_ids, stop_id)
+    all_geometry, visited_stops, routes_visited_stops = _get_geometry_routes(ctx_map, route_ids, stop_id)
     _draw_routes(ax, all_geometry)
 
     inputs: List[StopLabelInput] = []
@@ -332,10 +354,10 @@ def render_bus_lines_v2_only_last(ax,
     last_stops = _get_last_stops_for_routes_in_bbox(ctx_map, route_ids, bbox_gdf, exclude={stop_id})
 
     for vis_stop_id in last_stops:
-        cur_stop_row = ctx_map.stops_gdf[ctx_map.stops_gdf.stop_id == vis_stop_id]
-        if cur_stop_row.empty:
+        try:
+            cur_stop_row = ctx_map.stops_index.loc[vis_stop_id]
+        except KeyError:
             continue
-        cur_stop_row = cur_stop_row.iloc[0]
         cur_stop_pt: Point = cur_stop_row.geometry
 
         platform_row2 = platforms_map.get(vis_stop_id)
@@ -345,7 +367,12 @@ def render_bus_lines_v2_only_last(ax,
         platform_pt2: Point = platform_row2.iloc[0].geometry
 
         cur_route_ids = cur_stop_row.routes
-        visible_rids = list(set(route_ids) & set(cur_route_ids))
+
+        visible_rids = []
+        for rid in set(route_ids) & set(cur_route_ids):
+            if rid in routes_visited_stops and vis_stop_id in routes_visited_stops[rid]:
+                visible_rids.append(rid)
+
         visible_rids = _get_routes_with_last_stop(cur_stop_row, visible_rids, ctx_map.routes_map)
         if not visible_rids:
             continue
@@ -364,10 +391,10 @@ def render_bus_lines_v2_only_last(ax,
         ))
 
     for vis_stop_id in (visited_stops - last_stops):
-        cur_stop_row = ctx_map.stops_gdf[ctx_map.stops_gdf.stop_id == vis_stop_id]
-        if cur_stop_row.empty:
+        try:
+            cur_stop_row = ctx_map.stops_index.loc[vis_stop_id]
+        except KeyError:
             continue
-        cur_stop_row = cur_stop_row.iloc[0]
         cur_stop_pt: Point = cur_stop_row.geometry
 
         platform_row2 = platforms_map.get(vis_stop_id)

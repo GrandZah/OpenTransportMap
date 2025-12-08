@@ -75,15 +75,10 @@ def build_query_by_bbox(bbox: Dict[str, float]) -> str:
     return textwrap.dedent(
         f"""
         [out:json][timeout:180];
-        (
-          relation["type"="route"]["route"="bus"]({s},{w},{n},{e});
-        )->.routes;
-        (.routes; >>;)->.r_ways;
-        node["public_transport"="stop_position"]({s},{w},{n},{e});
-        out body;
-        .routes out tags;
-        .r_ways out body geom;
-    """
+        relation["type"="route"]["route"="bus"]({s},{w},{n},{e});
+        (._; >;);
+        out body geom;
+        """
     ).strip()
 
 @log_function_call

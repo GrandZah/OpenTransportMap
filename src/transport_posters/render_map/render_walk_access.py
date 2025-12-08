@@ -22,7 +22,7 @@ def _plot_dashed_arc(ax, cx, cy, r, a0, a1, *,
     return ln
 
 
-def _text_halo(txt, lw=2.2, fg="white", alpha=0.96):
+def _text_halo(txt, lw=3.2, fg="white", alpha=0.96):
     txt.set_path_effects([pe.Stroke(linewidth=lw, foreground=fg, alpha=alpha), pe.Normal()])
 
 

@@ -47,6 +47,7 @@ class CityRouteDatabase:
     routes_map: Dict[int, gpd.GeoDataFrame] = field(init=False)
     edges_map: Dict[int, gpd.GeoDataFrame] = field(init=False)
     id2ref: Dict[int, str] = field(init=False)
+    stops_index: gpd.GeoDataFrame = field(init=False)
 
     def __post_init__(self) -> None:
         self.__rebuild_maps()
@@ -119,6 +120,10 @@ class CityRouteDatabase:
                 return int(key)
             raise TypeError(f"{col} must be int-like, got {type(key).__name__}: {key!r}")
 
+        if "stop_id" not in self.stops_gdf:
+            raise KeyError("stops_gdf must contain 'stop_id' column")
+        self.stops_index = self.stops_gdf.set_index("stop_id", drop=False)
+
         platforms_map: dict[int, gpd.GeoDataFrame] = {}
         for key, df in self.platforms_gdf.groupby("stop_id", sort=False, dropna=False):
             ikey: int = _int_key(key, "stop_id")
@@ -134,7 +139,11 @@ class CityRouteDatabase:
         edges_map: dict[int, gpd.GeoDataFrame] = {}
         for key, df in self.edges_gdf.groupby("route_id", sort=False, dropna=False):
             ikey: int = _int_key(key, "route_id")
-            edges_map[ikey] = gpd.GeoDataFrame(df.copy(), geometry=df.geometry.name, crs=df.crs)
+            df_copy = gpd.GeoDataFrame(df.copy(),geometry=df.geometry.name,crs=df.crs,)
+
+            if "edge_idx" in df_copy.columns:
+                df_copy = df_copy.sort_values("edge_idx")
+            edges_map[ikey] = df_copy
         self.edges_map = edges_map
 
         if "route_id" not in self.routes_gdf or "ref" not in self.routes_gdf:
